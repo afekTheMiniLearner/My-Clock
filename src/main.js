@@ -59,4 +59,5 @@ const clocky = new Clock(30, 5, 1);
 setInterval(() => {
     clocky.showTime();
 }, 5000);
+
 console.log('im in');
