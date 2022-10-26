@@ -5,6 +5,7 @@ class Clock {
     #creation;
     #absoluteTime;
     #calculateClock;
+    
     constructor(sec, min, hrs) {
         this.#sec = sec ?? null;
         this.#min = min ?? null;
