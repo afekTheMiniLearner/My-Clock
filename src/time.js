@@ -7,6 +7,17 @@ module.exports.Time = class {
     #calculateTime;
 
     constructor(timeObject) {
+        const invalidParam =
+            timeObject.seconds > 60 ||
+            timeObject.minutes > 60 ||
+            timeObject.hours > 24 ||
+            timeObject.seconds < 0 ||
+            timeObject.minutes < 0 ||
+            timeObject.hours < 0;
+
+        if (invalidParam) throw Error('Time element out of range');
+        else if (timeObject.hours === 24) timeObject.hours = 0;
+
         this.#sec = timeObject.seconds ?? null;
         this.#min = timeObject.minutes ?? null;
         this.#hrs = timeObject.hours ?? null;
@@ -91,25 +102,26 @@ module.exports.Time = class {
         };
     }
 
-    get s() {
-        return JSON.stringify(this.#calculateTime()[2]);
+    get getSec() {
+        return +this.#calculateTime()[2];
     }
 
-    get m() {
-        return JSON.stringify(this.#calculateTime()[1]);
+    get getMin() {
+        return +this.#calculateTime()[1];
     }
 
-    get h() {
-        return JSON.stringify(this.#calculateTime()[0]);
+    get getHrs() {
+        return +this.#calculateTime()[0];
     }
 
     get totalSeconds() {
-        const res = JSON.stringify(this.#calculateTime()[0]);
-        let sum = (res[0] * 60 + res[1]) * 60 + res[2];
+        const res = this.#calculateTime();
+        let sum = (+res[0] * 60 + +res[1]) * 60 + +res[2];
         return sum;
     }
 
     set seconds(num) {
+        if (num > 60) throw Error("seconds can't set to more than 60");
         this.#absoluteTime.seconds.add.bool = false;
         this.#absoluteTime.seconds.sub.bool = false;
         this.#absoluteTime.seconds.set.bool = true;
@@ -117,6 +129,7 @@ module.exports.Time = class {
     }
 
     set minutes(num) {
+        if (num > 60) throw Error("minutes can't set to more than 60");
         this.#absoluteTime.minutes.add.bool = false;
         this.#absoluteTime.minutes.sub.bool = false;
         this.#absoluteTime.minutes.set.bool = true;
@@ -124,6 +137,10 @@ module.exports.Time = class {
     }
 
     set hours(num) {
+        if (num >= 24) {
+            if (num === 24) num = 0;
+            else throw Error("hours can't set to more than 24");
+        }
         this.#absoluteTime.hours.add.bool = false;
         this.#absoluteTime.hours.sub.bool = false;
         this.#absoluteTime.hours.set.bool = true;
