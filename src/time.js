@@ -6,7 +6,7 @@ module.exports.Time = class {
     #absoluteTime;
     #calculateTime;
 
-    constructor(timeObject) {
+    constructor(timeObject = { seconds: null, minutes: null, hours: null }) {
         const tooLow =
             timeObject.seconds < 0 ||
             timeObject.minutes < 0 ||
@@ -203,12 +203,11 @@ module.exports.Time = class {
     }
 
     addTime(time2) {
-        const result =
-            time2 !== undefined ? time2.toString().split(':') : undefined;
-
-        if (result.length !== 3 || result === undefined) {
-            throw Error('invalid time input');
+        if (!(time2 instanceof module.exports.Time)) {
+            throw Error('Invalid time input');
         }
+
+        const result = time2.toString().split(':');
 
         this.#absoluteTime.hours.add.bool = true;
         this.#absoluteTime.hours.add.num += +result[0];
@@ -219,12 +218,11 @@ module.exports.Time = class {
     }
 
     subTime(time2) {
-        const result =
-            time2 !== undefined ? time2.toString().split(':') : undefined;
-
-        if (result.length !== 3 || result === undefined) {
-            throw Error('invalid time input');
+        if (!(time2 instanceof module.exports.Time)) {
+            throw Error('Invalid time input');
         }
+
+        const result = time2.toString().split(':');
 
         this.#absoluteTime.hours.sub.bool = true;
         this.#absoluteTime.hours.sub.num += +result[0];

@@ -3,6 +3,17 @@ const { Time } = require('../time');
 describe('Time class tests', () => {
     describe('valid cases', () => {
         describe('creation tests', () => {
+            test('creating time without params returns valid time', () => {
+                const time1 = new Time();
+
+                const response = time1.toString().split(':');
+                expect(response.length).toBe(3);
+                for (const element of response) {
+                    expect(typeof element).toBe('string');
+                    expect(typeof +element).toBe('number');
+                }
+            });
+
             test.each([
                 [25, ['01', '00', '00']],
                 [48, ['00', '00', '00']],
@@ -479,7 +490,7 @@ describe('Time class tests', () => {
                     expect(arr).toEqual(res);
                 }
             );
-            //s
+
             test.each([
                 [
                     ['23', '30', '00'],
@@ -797,6 +808,56 @@ describe('Time class tests', () => {
                         expect(() => {
                             time1.seconds = num;
                         }).toThrow(Error("Time element can't be negative"));
+                    }
+                );
+            });
+
+            describe('add/sub methods invalid tests', () => {
+                test.each([
+                    [['01', '30', '30'], []],
+                    [['02', '30', '30'], 6],
+                    [['10', '01', '20'], 'hello'],
+                    [['00', '00', '00'], '908'],
+                    [['01', '30', '30'], '[00, 00, 00]'],
+                    [['00', '00', '00'], { a: 8, b: 5 }],
+                    [['14', '05', '10'], null],
+                    [['14', '05', '10'], undefined],
+                ])(
+                    'addTime method accepts param: %s and add it to time: %s, than return error',
+                    (arr1, param) => {
+                        const time1 = new Time({
+                            seconds: +arr1[2],
+                            minutes: +arr1[1],
+                            hours: +arr1[0],
+                        });
+
+                        expect(() => {
+                            time1.addTime(param);
+                        }).toThrow(Error('Invalid time input'));
+                    }
+                );
+
+                test.each([
+                    [['01', '30', '30'], []],
+                    [['02', '30', '30'], 6],
+                    [['10', '01', '20'], 'hello'],
+                    [['00', '00', '00'], '908'],
+                    [['01', '30', '30'], '[00, 00, 00]'],
+                    [['00', '00', '00'], { a: 8, b: 5 }],
+                    [['14', '05', '10'], null],
+                    [['14', '05', '10'], undefined],
+                ])(
+                    'subTime method accepts param: %s and sub it from time: %s, than return error',
+                    (arr1, param) => {
+                        const time1 = new Time({
+                            seconds: +arr1[2],
+                            minutes: +arr1[1],
+                            hours: +arr1[0],
+                        });
+
+                        expect(() => {
+                            time1.subTime(param);
+                        }).toThrow(Error('Invalid time input'));
                     }
                 );
             });
