@@ -1,4 +1,4 @@
-const { Time } = require('../time');
+const Time = require('../time');
 
 describe('Time class tests', () => {
     describe('valid cases', () => {

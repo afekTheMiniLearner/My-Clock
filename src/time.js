@@ -1,4 +1,4 @@
-module.exports.Time = class {
+class Time {
     #sec;
     #min;
     #hrs;
@@ -6,17 +6,14 @@ module.exports.Time = class {
     #absoluteTime;
     #calculateTime;
 
-    constructor(timeObject = { seconds: null, minutes: null, hours: null }) {
-        const tooLow =
-            timeObject.seconds < 0 ||
-            timeObject.minutes < 0 ||
-            timeObject.hours < 0;
+    constructor({ seconds = null, minutes = null, hours = null } = {}) {
+        const tooLow = seconds < 0 || minutes < 0 || hours < 0;
 
         if (tooLow) throw Error("Time element can't be negative");
 
-        this.#sec = timeObject.seconds ?? null;
-        this.#min = timeObject.minutes ?? null;
-        this.#hrs = timeObject.hours ?? null;
+        this.#sec = seconds ?? null;
+        this.#min = minutes ?? null;
+        this.#hrs = hours ?? null;
         this.#creation = new Date();
         this.#absoluteTime = {
             hours: {
@@ -104,6 +101,7 @@ module.exports.Time = class {
                 if (obj.set.bool === true) time[i] = obj.set.num;
 
                 time[i] = JSON.stringify(time[i]);
+                //padtart
                 if (time[i].length === 1) time[i] = '0' + time[i];
             }
 
@@ -124,8 +122,8 @@ module.exports.Time = class {
     }
 
     get totalSeconds() {
-        const res = this.#calculateTime();
-        let sum = (+res[0] * 60 + +res[1]) * 60 + +res[2];
+        const [h, m, s] = this.#calculateTime();
+        let sum = (+h * 60 + +m) * 60 + +s;
         return sum;
     }
 
@@ -203,7 +201,7 @@ module.exports.Time = class {
     }
 
     addTime(time2) {
-        if (!(time2 instanceof module.exports.Time)) {
+        if (!(time2 instanceof Time)) {
             throw Error('Invalid time input');
         }
 
@@ -218,7 +216,7 @@ module.exports.Time = class {
     }
 
     subTime(time2) {
-        if (!(time2 instanceof module.exports.Time)) {
+        if (!(time2 instanceof Time)) {
             throw Error('Invalid time input');
         }
 
@@ -276,4 +274,5 @@ module.exports.Time = class {
             );
         }
     }
-};
+}
+module.exports = Time;
