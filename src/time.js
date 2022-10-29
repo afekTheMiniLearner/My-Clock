@@ -232,8 +232,48 @@ module.exports.Time = class {
         this.#absoluteTime.seconds.sub.num += +result[2];
     }
 
-    toString() {
-        // last task is to implement optionsFormat
-        return this.#calculateTime().join(':');
+    toString(format = 'default') {
+        if (typeof format !== 'string' || format === '') {
+            throw Error(
+                'Format options must contain one of the following: HH/MM/SS'
+            );
+        }
+
+        const result = this.#calculateTime();
+
+        if (format === 'default' || format === undefined)
+            return result.join(':');
+        else {
+            let isValid = false;
+            let formattedResult = '';
+
+            for (let i = 0; i < format.length; i++) {
+                switch (true) {
+                    case format.charAt(i) + format.charAt(i + 1) === 'HH':
+                        formattedResult += result[0];
+                        isValid = true;
+                        i++;
+                        break;
+                    case format.charAt(i) + format.charAt(i + 1) === 'MM':
+                        formattedResult += result[1];
+                        isValid = true;
+                        i++;
+                        break;
+                    case format.charAt(i) + format.charAt(i + 1) === 'SS':
+                        formattedResult += result[2];
+                        isValid = true;
+                        i++;
+                        break;
+                    default:
+                        formattedResult += format.charAt(i);
+                }
+            }
+
+            if (isValid === true) return formattedResult;
+
+            throw Error(
+                'Format options must contain one of the following: HH/MM/SS'
+            );
+        }
     }
 };
