@@ -5,12 +5,14 @@ describe('Time class tests', () => {
         describe('creation tests', () => {
             test('creating time without params returns valid time', () => {
                 const time1 = new Time();
-
                 const response = time1.toString().split(':');
+
                 expect(response.length).toBe(3);
                 for (const element of response) {
+                    const num = +element;
                     expect(typeof element).toBe('string');
-                    expect(typeof +element).toBe('number');
+                    expect(typeof num).toBe('number');
+                    expect(num > 0).toBeTruthy();
                 }
             });
 
