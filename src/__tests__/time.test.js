@@ -17,10 +17,10 @@ describe('Time class tests', () => {
             });
 
             test.each([
-                [25, ['01', '00', '00']],
-                [48, ['00', '00', '00']],
-                [50, ['02', '00', '00']],
-                [10, ['10', '00', '00']],
+                [25, ['25', '00', '00']],
+                [48, ['48', '00', '00']],
+                [152, ['52', '00', '00']],
+                [100, ['00', '00', '00']],
                 [22, ['22', '00', '00']],
                 [5, ['05', '00', '00']],
                 [1, ['01', '00', '00']],
@@ -62,7 +62,7 @@ describe('Time class tests', () => {
             );
 
             test.each([
-                [96100, ['02', '41', '40']],
+                [96100, ['26', '41', '40']],
                 [16000, ['04', '26', '40']],
                 [5420, ['01', '30', '20']],
                 [4010, ['01', '06', '50']],
@@ -107,7 +107,8 @@ describe('Time class tests', () => {
             );
 
             test.each([
-                [60, 60],
+                [60, 0],
+                [59, 59],
                 [30, 30],
                 [20, 20],
                 [10, 10],
@@ -122,12 +123,13 @@ describe('Time class tests', () => {
                         hours: 0,
                     });
 
-                    expect(+time1.getMin).toBe(res);
+                    expect(time1.getMin).toBe(res);
                 }
             );
 
             test.each([
-                [60, 60],
+                [60, 0],
+                [59, 59],
                 [30, 30],
                 [20, 20],
                 [10, 10],
@@ -142,7 +144,7 @@ describe('Time class tests', () => {
                         hours: 0,
                     });
 
-                    expect(+time1.getSec).toBe(res);
+                    expect(time1.getSec).toBe(res);
                 }
             );
 
@@ -170,7 +172,7 @@ describe('Time class tests', () => {
         describe('set methods tests', () => {
             test.each([
                 [23, ['23', '00', '00']],
-                [24, ['00', '00', '00']],
+                [60, ['60', '00', '00']],
                 [20, ['20', '00', '00']],
                 [10, ['10', '00', '00']],
                 [5, ['05', '00', '00']],
@@ -191,7 +193,8 @@ describe('Time class tests', () => {
             );
 
             test.each([
-                [60, ['00', '60', '00']],
+                [60, ['01', '00', '00']],
+                [59, ['00', '59', '00']],
                 [30, ['00', '30', '00']],
                 [20, ['00', '20', '00']],
                 [10, ['00', '10', '00']],
@@ -213,7 +216,8 @@ describe('Time class tests', () => {
             );
 
             test.each([
-                [60, ['00', '00', '60']],
+                [60, ['00', '01', '00']],
+                [59, ['00', '00', '59']],
                 [30, ['00', '00', '30']],
                 [20, ['00', '00', '20']],
                 [10, ['00', '00', '10']],
@@ -237,20 +241,21 @@ describe('Time class tests', () => {
 
         describe('add/sub methods tests', () => {
             test.each([
-                [25, ['01', '00', '00']],
-                [48, ['00', '00', '00']],
-                [50, ['02', '00', '00']],
-                [10, ['10', '00', '00']],
-                [22, ['22', '00', '00']],
-                [5, ['05', '00', '00']],
-                [1, ['01', '00', '00']],
+                [25, ['30', '05', '05']],
+                [48, ['53', '05', '05']],
+                [50, ['55', '05', '05']],
+                [10, ['15', '05', '05']],
+                [22, ['27', '05', '05']],
+                [5, ['10', '05', '05']],
+                [1, ['06', '05', '05']],
+                [0, ['05', '05', '05']],
             ])(
                 'addHours method accepts number:%s and returns time: %s',
                 (num, res) => {
                     const time1 = new Time({
-                        seconds: 0,
-                        minutes: 0,
-                        hours: 0,
+                        seconds: 5,
+                        minutes: 5,
+                        hours: 5,
                     });
                     time1.addHours(num);
 
@@ -260,20 +265,20 @@ describe('Time class tests', () => {
             );
 
             test.each([
-                [1001, ['16', '41', '00']],
-                [100, ['01', '40', '00']],
-                [67, ['01', '07', '00']],
-                [53, ['00', '53', '00']],
-                [10, ['00', '10', '00']],
-                [22, ['00', '22', '00']],
-                [5, ['00', '05', '00']],
-                [1, ['00', '01', '00']],
+                [1001, ['16', '51', '25']],
+                [100, ['01', '50', '25']],
+                [67, ['01', '17', '25']],
+                [53, ['01', '03', '25']],
+                [10, ['00', '20', '25']],
+                [22, ['00', '32', '25']],
+                [5, ['00', '15', '25']],
+                [1, ['00', '11', '25']],
             ])(
                 'addMinutes method accepts number:%s and returns time: %s',
                 (num, res) => {
                     const time1 = new Time({
-                        seconds: 0,
-                        minutes: 0,
+                        seconds: 25,
+                        minutes: 10,
                         hours: 0,
                     });
                     time1.addMinutes(num);
@@ -284,21 +289,21 @@ describe('Time class tests', () => {
             );
 
             test.each([
-                [96100, ['02', '41', '40']],
-                [16000, ['04', '26', '40']],
-                [5420, ['01', '30', '20']],
-                [4010, ['01', '06', '50']],
-                [305, ['00', '05', '05']],
-                [68, ['00', '01', '08']],
-                [40, ['00', '00', '40']],
-                [6, ['00', '00', '06']],
+                [96100, ['28', '41', '40']],
+                [16000, ['06', '26', '40']],
+                [5420, ['03', '30', '20']],
+                [4010, ['03', '06', '50']],
+                [305, ['02', '05', '05']],
+                [68, ['02', '01', '08']],
+                [40, ['02', '00', '40']],
+                [6, ['02', '00', '06']],
             ])(
                 'addSeconds method accepts number:%s and returns time: %s',
                 (num, res) => {
                     const time1 = new Time({
                         seconds: 0,
                         minutes: 0,
-                        hours: 0,
+                        hours: 2,
                     });
                     time1.addSeconds(num);
 
@@ -321,7 +326,7 @@ describe('Time class tests', () => {
                 [
                     ['10', '01', '20'],
                     ['23', '23', '20'],
-                    ['09', '24', '40'],
+                    ['33', '24', '40'],
                 ],
                 [
                     ['00', '00', '00'],
@@ -424,9 +429,9 @@ describe('Time class tests', () => {
             );
 
             test.each([
-                [['27', '00', '00'], 2, ['01', '00', '00']],
+                [['27', '00', '00'], 2, ['25', '00', '00']],
                 [['3', '30', '50'], 5, ['00', '00', '00']],
-                [['50', '00', '00'], 0, ['02', '00', '00']],
+                [['50', '00', '00'], 0, ['50', '00', '00']],
                 [['15', '00', '00'], 10, ['05', '00', '00']],
                 [['13', '00', '00'], 6, ['07', '00', '00']],
                 [['00', '30', '00'], 1, ['00', '00', '00']],
@@ -452,7 +457,7 @@ describe('Time class tests', () => {
                 [['04', '00', '00'], 0, ['04', '00', '00']],
                 [['15', '60', '00'], 70, ['14', '50', '00']],
                 [['1', '30', '57'], 1000, ['00', '00', '00']],
-                [['00', '05', '120'], 6, ['00', '00', '60']],
+                [['00', '05', '120'], 6, ['00', '01', '00']],
                 [['00', '05', '100'], 6, ['00', '00', '40']],
             ])(
                 'subMinutes method created with %s time, accepts number:%s and returns time: %s',
@@ -548,7 +553,7 @@ describe('Time class tests', () => {
                 ],
                 [
                     ['50', '11', '43'],
-                    ['02', '00', '43'],
+                    ['50', '00', '43'],
                 ],
                 [
                     ['06', '00', '00'],
@@ -592,7 +597,7 @@ describe('Time class tests', () => {
                 ],
                 [
                     ['50', '11', '43'],
-                    ['02', '11', '00'],
+                    ['50', '11', '00'],
                 ],
                 [
                     ['06', '02', '39'],
@@ -603,7 +608,7 @@ describe('Time class tests', () => {
                     ['13', '10', '00'],
                 ],
                 [
-                    ['01', '30', '60'],
+                    ['01', '30', '50'],
                     ['01', '30', '00'],
                 ],
                 [
@@ -683,16 +688,19 @@ describe('Time class tests', () => {
                 ['HHhrs', '10hrs'],
                 ['MMmins', '15mins'],
                 ['SSseconds', '30seconds'],
-                [undefined, '10:15:30'],
-            ])('The format option provided is invalid', (format, res) => {
-                const time1 = new Time({
-                    seconds: 30,
-                    minutes: 15,
-                    hours: 10,
-                });
+                ['default', '10:15:30'],
+            ])(
+                'The format option provided is: %s expected output: %s',
+                (format, res) => {
+                    const time1 = new Time({
+                        seconds: 30,
+                        minutes: 15,
+                        hours: 10,
+                    });
 
-                expect(time1.toString(format)).toBe(res);
-            });
+                    expect(time1.toString(format)).toBe(res);
+                }
+            );
         });
 
         describe('invalid cases', () => {
@@ -756,160 +764,160 @@ describe('Time class tests', () => {
                         });
                     }).toThrow(Error("Time element can't be negative"));
                 });
+            });
 
-                describe('set methods invalid tests', () => {
-                    test.each([
-                        [-9],
-                        [-5],
-                        [-300],
-                        [-200],
-                        [-29],
-                        [-61],
-                        [-1],
-                        [-10],
-                        [-90],
-                    ])(
-                        'set hours method accepts invalid number: %s and returns error',
-                        (num) => {
-                            const time1 = new Time({
-                                seconds: 0,
-                                minutes: 0,
-                                hours: 0,
-                            });
-
-                            expect(() => {
-                                time1.hours = num;
-                            }).toThrow(Error("Time element can't be negative"));
-                        }
-                    );
-
-                    test.each([
-                        [-9],
-                        [-5],
-                        [-300],
-                        [-200],
-                        [-29],
-                        [-61],
-                        [-1],
-                        [-10],
-                        [-90],
-                    ])(
-                        'set minutes method accepts invalid number: %s and returns error',
-                        (num) => {
-                            const time1 = new Time({
-                                seconds: 0,
-                                minutes: 0,
-                                hours: 0,
-                            });
-
-                            expect(() => {
-                                time1.minutes = num;
-                            }).toThrow(Error("Time element can't be negative"));
-                        }
-                    );
-
-                    test.each([
-                        [-9],
-                        [-5],
-                        [-300],
-                        [-200],
-                        [-29],
-                        [-61],
-                        [-1],
-                        [-10],
-                        [-90],
-                    ])(
-                        'set seconds method accepts invalid number: %s and returns error',
-                        (num) => {
-                            const time1 = new Time({
-                                seconds: 0,
-                                minutes: 0,
-                                hours: 0,
-                            });
-
-                            expect(() => {
-                                time1.seconds = num;
-                            }).toThrow(Error("Time element can't be negative"));
-                        }
-                    );
-                });
-
-                describe('add/sub methods invalid tests', () => {
-                    test.each([
-                        [['01', '30', '30'], []],
-                        [['02', '30', '30'], 6],
-                        [['10', '01', '20'], 'hello'],
-                        [['00', '00', '00'], '908'],
-                        [['01', '30', '30'], '[00, 00, 00]'],
-                        [['00', '00', '00'], { a: 8, b: 5 }],
-                        [['14', '05', '10'], null],
-                        [['14', '05', '10'], undefined],
-                    ])(
-                        'addTime method accepts param: %s and add it to time: %s, than return error',
-                        (arr1, param) => {
-                            const time1 = new Time({
-                                seconds: +arr1[2],
-                                minutes: +arr1[1],
-                                hours: +arr1[0],
-                            });
-
-                            expect(() => {
-                                time1.addTime(param);
-                            }).toThrow(Error('Invalid time input'));
-                        }
-                    );
-
-                    test.each([
-                        [['01', '30', '30'], []],
-                        [['02', '30', '30'], 6],
-                        [['10', '01', '20'], 'hello'],
-                        [['00', '00', '00'], '908'],
-                        [['01', '30', '30'], '[00, 00, 00]'],
-                        [['00', '00', '00'], { a: 8, b: 5 }],
-                        [['14', '05', '10'], null],
-                        [['14', '05', '10'], undefined],
-                    ])(
-                        'subTime method accepts param: %s and sub it from time: %s, than return error',
-                        (arr1, param) => {
-                            const time1 = new Time({
-                                seconds: +arr1[2],
-                                minutes: +arr1[1],
-                                hours: +arr1[0],
-                            });
-
-                            expect(() => {
-                                time1.subTime(param);
-                            }).toThrow(Error('Invalid time input'));
-                        }
-                    );
-                });
-
-                describe('toString method invalid tests', () => {
-                    test.each([
-                        [10],
-                        [-1],
-                        [''],
-                        [[1, 23, 4, 'a']],
-                        [{ hours: 1, minutes: 9 }],
-                        ['justAstring'],
-                        ['afek'],
-                        ['hello'],
-                        [['array']],
-                    ])('The format option provided is invalid', (format) => {
+            describe('set methods invalid tests', () => {
+                test.each([
+                    [-9],
+                    [-5],
+                    [-300],
+                    [-200],
+                    [-29],
+                    [-61],
+                    [-1],
+                    [-10],
+                    [-90],
+                ])(
+                    'set hours method accepts invalid number: %s and returns error',
+                    (num) => {
                         const time1 = new Time({
-                            seconds: 10,
-                            minutes: 10,
-                            hours: 10,
+                            seconds: 0,
+                            minutes: 0,
+                            hours: 0,
                         });
 
                         expect(() => {
-                            time1.toString(format);
-                        }).toThrow(
-                            Error(
-                                'Format options must contain one of the following: HH/MM/SS'
-                            )
-                        );
+                            time1.hours = num;
+                        }).toThrow(Error("Time element can't be negative"));
+                    }
+                );
+
+                test.each([
+                    [-9],
+                    [-5],
+                    [-300],
+                    [-200],
+                    [-29],
+                    [-61],
+                    [-1],
+                    [-10],
+                    [-90],
+                ])(
+                    'set minutes method accepts invalid number: %s and returns error',
+                    (num) => {
+                        const time1 = new Time({
+                            seconds: 0,
+                            minutes: 0,
+                            hours: 0,
+                        });
+
+                        expect(() => {
+                            time1.minutes = num;
+                        }).toThrow(Error("Time element can't be negative"));
+                    }
+                );
+
+                test.each([
+                    [-9],
+                    [-5],
+                    [-300],
+                    [-200],
+                    [-29],
+                    [-61],
+                    [-1],
+                    [-10],
+                    [-90],
+                ])(
+                    'set seconds method accepts invalid number: %s and returns error',
+                    (num) => {
+                        const time1 = new Time({
+                            seconds: 0,
+                            minutes: 0,
+                            hours: 0,
+                        });
+
+                        expect(() => {
+                            time1.seconds = num;
+                        }).toThrow(Error("Time element can't be negative"));
+                    }
+                );
+            });
+
+            describe('add/sub methods invalid tests', () => {
+                test.each([
+                    [['01', '30', '30'], []],
+                    [['02', '30', '30'], 6],
+                    [['10', '01', '20'], 'hello'],
+                    [['00', '00', '00'], '908'],
+                    [['01', '30', '30'], '[00, 00, 00]'],
+                    [['00', '00', '00'], { a: 8, b: 5 }],
+                    [['14', '05', '10'], null],
+                    [['14', '05', '10'], undefined],
+                ])(
+                    'addTime method accepts param: %s and add it to time: %s, than return error',
+                    (arr1, param) => {
+                        const time1 = new Time({
+                            seconds: +arr1[2],
+                            minutes: +arr1[1],
+                            hours: +arr1[0],
+                        });
+
+                        expect(() => {
+                            time1.addTime(param);
+                        }).toThrow(Error('Invalid time input'));
+                    }
+                );
+
+                test.each([
+                    [['01', '30', '30'], []],
+                    [['02', '30', '30'], 6],
+                    [['10', '01', '20'], 'hello'],
+                    [['00', '00', '00'], '908'],
+                    [['01', '30', '30'], '[00, 00, 00]'],
+                    [['00', '00', '00'], { a: 8, b: 5 }],
+                    [['14', '05', '10'], null],
+                    [['14', '05', '10'], undefined],
+                ])(
+                    'subTime method accepts param: %s and sub it from time: %s, than return error',
+                    (arr1, param) => {
+                        const time1 = new Time({
+                            seconds: +arr1[2],
+                            minutes: +arr1[1],
+                            hours: +arr1[0],
+                        });
+
+                        expect(() => {
+                            time1.subTime(param);
+                        }).toThrow(Error('Invalid time input'));
+                    }
+                );
+            });
+
+            describe('toString method invalid tests', () => {
+                test.each([
+                    [10],
+                    [-1],
+                    [''],
+                    [[1, 23, 4, 'a']],
+                    [{ hours: 1, minutes: 9 }],
+                    ['justAstring'],
+                    ['afek'],
+                    ['hello'],
+                    [['array']],
+                ])('The format option provided: %s is invalid', (format) => {
+                    const time1 = new Time({
+                        seconds: 10,
+                        minutes: 10,
+                        hours: 10,
                     });
+
+                    expect(() => {
+                        time1.toString(format);
+                    }).toThrow(
+                        Error(
+                            'Format options must contain one of the following: HH/MM/SS'
+                        )
+                    );
                 });
             });
         });
