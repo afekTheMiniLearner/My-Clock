@@ -141,6 +141,7 @@ class Time {
             let isValid = false;
             let formattedResult = '';
 
+            //todo change to replace
             for (let i = 0; i < format.length; i++) {
                 switch (true) {
                     case format.charAt(i) + format.charAt(i + 1) === 'HH':
