@@ -102,7 +102,7 @@ describe('Time class tests', () => {
                         hours: num,
                     });
 
-                    expect(time1.getHrs).toBe(res);
+                    expect(time1.getHours).toBe(res);
                 }
             );
 
@@ -123,7 +123,7 @@ describe('Time class tests', () => {
                         hours: 0,
                     });
 
-                    expect(time1.getMin).toBe(res);
+                    expect(time1.getMinutes).toBe(res);
                 }
             );
 
@@ -144,7 +144,7 @@ describe('Time class tests', () => {
                         hours: 0,
                     });
 
-                    expect(time1.getSec).toBe(res);
+                    expect(time1.getSeconds).toBe(res);
                 }
             );
 

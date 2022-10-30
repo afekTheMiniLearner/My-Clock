@@ -22,16 +22,16 @@ class Time {
         }
     }
 
-    get getHrs() {
+    get getHours() {
         const res = ~~((this.#totalSec / 60 / 60) % 100);
         return res;
     }
 
-    get getMin() {
+    get getMinutes() {
         return ~~((this.#totalSec / 60) % 60);
     }
 
-    get getSec() {
+    get getSeconds() {
         return ~~((this.#totalSec % 60) % 60);
     }
 
@@ -42,7 +42,7 @@ class Time {
     set hours(num) {
         if (num < 0) throw Error("Time element can't be negative");
 
-        const hrs = this.getHrs;
+        const hrs = this.getHours;
         num %= 100;
 
         this.#totalSec += num * 3600 - hrs * 3600;
@@ -51,14 +51,14 @@ class Time {
     set minutes(num) {
         if (num < 0) throw Error("Time element can't be negative");
 
-        const min = this.getMin;
+        const min = this.getMinutes;
 
         this.#totalSec += num * 60 - min * 60;
     }
 
     set seconds(num) {
         if (num < 0) throw Error("Time element can't be negative");
-        const sec = this.getSec;
+        const sec = this.getSeconds;
 
         this.#totalSec += num - sec;
     }
@@ -91,15 +91,15 @@ class Time {
     }
 
     resetSeconds() {
-        this.#totalSec -= this.getSec;
+        this.#totalSec -= this.getSeconds;
     }
 
     resetMinutes() {
-        this.#totalSec -= this.getMin * 60;
+        this.#totalSec -= this.getMinutes * 60;
     }
 
     resetHours() {
-        this.#totalSec -= this.getHrs * 3600;
+        this.#totalSec -= this.getHours * 3600;
     }
 
     reset() {
@@ -125,9 +125,9 @@ class Time {
 
     toString(format = 'default') {
         const result = [
-            `${this.getHrs}`.padStart(2, '0'),
-            `${this.getMin}`.padStart(2, '0'),
-            `${this.getSec}`.padStart(2, '0'),
+            `${this.getHours}`.padStart(2, '0'),
+            `${this.getMinutes}`.padStart(2, '0'),
+            `${this.getSeconds}`.padStart(2, '0'),
         ];
 
         if (typeof format !== 'string') {
