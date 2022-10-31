@@ -1,8 +1,14 @@
+//todo import from external file - utils
+// time range -99:59:59 - +99:59:59
+
 class Time {
     #totalSec;
+    //change name
 
-    static #validateParam(param) {
-        if (param === null) return;
+    static #validateParam(param, allowedNull = true) {
+        if (param === null)
+            if (allowedNull) return;
+            else throw Error('Time element must be a valid positive number');
 
         const isNegative = param < 0;
         const isInvalid = typeof param !== 'number' && !Number.isNaN(seconds);
@@ -28,6 +34,7 @@ class Time {
             hours = hours ?? 0;
 
             total = seconds + minutes * 60 + hours * 60 * 60;
+            //use converters
         }
         return total;
     }
@@ -56,6 +63,7 @@ class Time {
         return ~~((this.#totalSec % 60) % 60);
     }
 
+    // change to hours
     get getHours() {
         return this.#calculateHours();
     }
@@ -73,7 +81,7 @@ class Time {
     }
 
     set hours(num) {
-        Time.#validateParam(num);
+        Time.#validateParam(num, false);
 
         const hrs = this.getHours;
         num %= 100;
@@ -82,7 +90,7 @@ class Time {
     }
 
     set minutes(num) {
-        Time.#validateParam(num);
+        Time.#validateParam(num, false);
 
         const min = this.getMinutes;
 
@@ -90,7 +98,7 @@ class Time {
     }
 
     set seconds(num) {
-        Time.#validateParam(num);
+        Time.#validateParam(num, false);
 
         const sec = this.getSeconds;
 
@@ -98,39 +106,39 @@ class Time {
     }
 
     addHours(num) {
-        Time.#validateParam(num);
+        Time.#validateParam(num, false);
 
         this.#totalSec += (num % 100) * 3600;
     }
 
     addMinutes(num) {
-        Time.#validateParam(num);
+        Time.#validateParam(num, false);
 
         this.#totalSec += num * 60;
     }
 
     addSeconds(num) {
-        Time.#validateParam(num);
+        Time.#validateParam(num, false);
 
         this.#totalSec += num;
     }
 
     subHours(num) {
-        Time.#validateParam(num);
+        Time.#validateParam(num, false);
 
         if (this.#totalSec - (num % 100) * 3600 < 0) this.#totalSec = 0;
         else this.#totalSec -= (num % 100) * 3600;
     }
 
     subMinutes(num) {
-        Time.#validateParam(num);
+        Time.#validateParam(num, false);
 
         if (this.#totalSec - num * 60 < 0) this.#totalSec = 0;
         else this.#totalSec -= num * 60;
     }
 
     subSeconds(num) {
-        Time.#validateParam(num);
+        Time.#validateParam(num, false);
 
         if (this.#totalSec - num < 0) this.#totalSec = 0;
         else this.#totalSec -= num;
@@ -176,18 +184,10 @@ class Time {
             );
         }
 
-        const [hours, minutes, seconds] = [
-            `${this.getHours}`.padStart(2, '0'),
-            `${this.getMinutes}`.padStart(2, '0'),
-            `${this.getSeconds}`.padStart(2, '0'),
-        ];
-
-        format = format
-            .replace('HH', hours)
-            .replace('MM', minutes)
-            .replace('SS', seconds);
-
-        return format;
+        return format
+            .replace('HH', `${this.getHours}`.padStart(2, '0'))
+            .replace('MM', `${this.getMinutes}`.padStart(2, '0'))
+            .replace('SS', `${this.getSeconds}`.padStart(2, '0'));
     }
 }
 
