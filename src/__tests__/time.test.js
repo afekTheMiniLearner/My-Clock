@@ -21,7 +21,7 @@ describe('Time class tests', () => {
                 [48, ['48', '00', '00']],
                 [152, ['52', '00', '00']],
                 [100, ['00', '00', '00']],
-                [22, ['22', '00', '00']],
+                [0, ['00', '00', '00']],
                 [5, ['05', '00', '00']],
                 [1, ['01', '00', '00']],
             ])(
@@ -47,6 +47,7 @@ describe('Time class tests', () => {
                 [22, ['00', '22', '00']],
                 [5, ['00', '05', '00']],
                 [1, ['00', '01', '00']],
+                [0, ['00', '00', '00']],
             ])(
                 'creating time with %s minutes should returns time: %s',
                 (num, result) => {
@@ -70,6 +71,7 @@ describe('Time class tests', () => {
                 [68, ['00', '01', '08']],
                 [40, ['00', '00', '40']],
                 [6, ['00', '00', '06']],
+                [0, ['00', '00', '00']],
             ])(
                 'creating time with %s seconds should returns time: %s',
                 (num, result) => {
@@ -114,6 +116,7 @@ describe('Time class tests', () => {
                 [10, 10],
                 [5, 5],
                 [1, 1],
+                [0, 0],
             ])(
                 'get minutes method for the time created with: %s minutes, returns number: %s',
                 (num, res) => {
@@ -135,6 +138,7 @@ describe('Time class tests', () => {
                 [10, 10],
                 [5, 5],
                 [1, 1],
+                [0, 0],
             ])(
                 'get seconds method for the time created with: %s seconds, returns number: %s',
                 (num, res) => {
@@ -155,8 +159,9 @@ describe('Time class tests', () => {
                 [0, 15, 900],
                 [10, 0, 36000],
                 [0, 1, 60],
+                [0, 0, 0],
             ])(
-                'get method totalSeconds  for time created with: %s hours and %s minutes, returns: %s',
+                'get method totalSeconds for time created with: %s hours and %s minutes, returns: %s',
                 (hrs, min, res) => {
                     const time1 = new Time({
                         seconds: 0,
@@ -177,6 +182,7 @@ describe('Time class tests', () => {
                 [10, ['10', '00', '00']],
                 [5, ['05', '00', '00']],
                 [1, ['01', '00', '00']],
+                [0, ['00', '00', '00']],
             ])(
                 'set hours method accepts number:%s and returns time: %s',
                 (num, res) => {
@@ -200,6 +206,7 @@ describe('Time class tests', () => {
                 [10, ['00', '10', '00']],
                 [5, ['00', '05', '00']],
                 [1, ['00', '01', '00']],
+                [0, ['00', '00', '00']],
             ])(
                 'set minutes method accepts number:%s and returns time: %s',
                 (num, res) => {
@@ -223,6 +230,7 @@ describe('Time class tests', () => {
                 [10, ['00', '00', '10']],
                 [5, ['00', '00', '05']],
                 [1, ['00', '00', '01']],
+                [0, ['00', '00', '00']],
             ])(
                 'set seconds method accepts number:%s and returns time: %s',
                 (num, res) => {
@@ -273,6 +281,7 @@ describe('Time class tests', () => {
                 [22, ['00', '32', '25']],
                 [5, ['00', '15', '25']],
                 [1, ['00', '11', '25']],
+                [0, ['00', '10', '25']],
             ])(
                 'addMinutes method accepts number:%s and returns time: %s',
                 (num, res) => {
@@ -297,6 +306,7 @@ describe('Time class tests', () => {
                 [68, ['02', '01', '08']],
                 [40, ['02', '00', '40']],
                 [6, ['02', '00', '06']],
+                [0, ['02', '00', '00']],
             ])(
                 'addSeconds method accepts number:%s and returns time: %s',
                 (num, res) => {
@@ -382,7 +392,7 @@ describe('Time class tests', () => {
                     ['19', '20', '31'],
                 ],
                 [
-                    ['09', '24', '40'],
+                    ['00', '00', '00'],
                     ['10', '01', '20'],
                     ['00', '00', '00'],
                 ],
@@ -403,8 +413,8 @@ describe('Time class tests', () => {
                 ],
                 [
                     ['19', '05', '25'],
-                    ['14', '05', '10'],
-                    ['05', '00', '15'],
+                    ['00', '00', '00'],
+                    ['19', '05', '25'],
                 ],
             ])(
                 'subTime method accepts time: %s and sub from it time: %s, result: %s',

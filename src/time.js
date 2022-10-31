@@ -1,6 +1,17 @@
 class Time {
     #totalSec;
 
+    static #validateParam(param) {
+        if (param === null) return;
+
+        const isNegative = param < 0;
+        const isInvalid = typeof param !== 'number' && !Number.isNaN(seconds);
+
+        if (isInvalid || isNegative) {
+            throw Error('Time element must be a valid positive number');
+        }
+    }
+
     static #calculateParams({ seconds, minutes, hours } = {}) {
         let total;
 
@@ -19,17 +30,6 @@ class Time {
             total = seconds + minutes * 60 + hours * 60 * 60;
         }
         return total;
-    }
-
-    static #validateParam(param) {
-        if (param === null) return;
-
-        const isNegative = param < 0;
-        const isInvalid = typeof param !== 'number' && !Number.isNaN(seconds);
-
-        if (isInvalid || isNegative) {
-            throw Error('Time element must be a valid positive number');
-        }
     }
 
     constructor({ seconds = null, minutes = null, hours = null } = {}) {
@@ -98,28 +98,40 @@ class Time {
     }
 
     addHours(num) {
+        Time.#validateParam(num);
+
         this.#totalSec += (num % 100) * 3600;
     }
 
     addMinutes(num) {
+        Time.#validateParam(num);
+
         this.#totalSec += num * 60;
     }
 
     addSeconds(num) {
+        Time.#validateParam(num);
+
         this.#totalSec += num;
     }
 
     subHours(num) {
+        Time.#validateParam(num);
+
         if (this.#totalSec - (num % 100) * 3600 < 0) this.#totalSec = 0;
         else this.#totalSec -= (num % 100) * 3600;
     }
 
     subMinutes(num) {
+        Time.#validateParam(num);
+
         if (this.#totalSec - num * 60 < 0) this.#totalSec = 0;
         else this.#totalSec -= num * 60;
     }
 
     subSeconds(num) {
+        Time.#validateParam(num);
+
         if (this.#totalSec - num < 0) this.#totalSec = 0;
         else this.#totalSec -= num;
     }
@@ -158,17 +170,17 @@ class Time {
     }
 
     toString(format = 'HH:MM:SS') {
-        const [hours, minutes, seconds] = [
-            `${this.getHours}`.padStart(2, '0'),
-            `${this.getMinutes}`.padStart(2, '0'),
-            `${this.getSeconds}`.padStart(2, '0'),
-        ];
-
         if (typeof format !== 'string') {
             throw Error(
                 'Format options must contain one of the following: HH/MM/SS'
             );
         }
+
+        const [hours, minutes, seconds] = [
+            `${this.getHours}`.padStart(2, '0'),
+            `${this.getMinutes}`.padStart(2, '0'),
+            `${this.getSeconds}`.padStart(2, '0'),
+        ];
 
         format = format
             .replace('HH', hours)
