@@ -1,15 +1,13 @@
 class Time {
     #totalSec;
 
-    constructor({ seconds = null, minutes = null, hours = null } = {}) {
-        const noParams = seconds === null && minutes === null && hours === null;
-        const negativeParams = seconds < 0 || minutes < 0 || hours < 0;
+    static #calculateParams({ seconds, minutes, hours } = {}) {
+        let total;
 
-        if (negativeParams) throw Error("Time element can't be negative");
-
-        if (noParams) {
+        if (seconds === null && minutes === null && hours === null) {
             const now = new Date();
-            this.#totalSec =
+
+            total =
                 now.getHours() * 3600 +
                 now.getMinutes() * 60 +
                 now.getSeconds();
@@ -18,21 +16,56 @@ class Time {
             minutes = minutes ?? 0;
             hours = hours ?? 0;
 
-            this.#totalSec = seconds + minutes * 60 + hours * 60 * 60;
+            total = seconds + minutes * 60 + hours * 60 * 60;
+        }
+        return total;
+    }
+
+    static #validateParam(param) {
+        if (param === null) return;
+
+        const isNegative = param < 0;
+        const isInvalid = typeof param !== 'number' && !Number.isNaN(seconds);
+
+        if (isInvalid || isNegative) {
+            throw Error('Time element must be a valid positive number');
         }
     }
 
-    get getHours() {
-        const res = ~~((this.#totalSec / 60 / 60) % 100);
-        return res;
+    constructor({ seconds = null, minutes = null, hours = null } = {}) {
+        Time.#validateParam(seconds);
+        Time.#validateParam(minutes);
+        Time.#validateParam(hours);
+
+        this.#totalSec = Time.#calculateParams({
+            seconds,
+            minutes,
+            hours,
+        });
     }
 
-    get getMinutes() {
+    #calculateHours() {
+        return ~~((this.#totalSec / 60 / 60) % 100);
+    }
+
+    #calculateMinutes() {
         return ~~((this.#totalSec / 60) % 60);
     }
 
-    get getSeconds() {
+    #calculateSeconds() {
         return ~~((this.#totalSec % 60) % 60);
+    }
+
+    get getHours() {
+        return this.#calculateHours();
+    }
+
+    get getMinutes() {
+        return this.#calculateMinutes();
+    }
+
+    get getSeconds() {
+        return this.#calculateSeconds();
     }
 
     get totalSeconds() {
@@ -40,7 +73,7 @@ class Time {
     }
 
     set hours(num) {
-        if (num < 0) throw Error("Time element can't be negative");
+        Time.#validateParam(num);
 
         const hrs = this.getHours;
         num %= 100;
@@ -49,7 +82,7 @@ class Time {
     }
 
     set minutes(num) {
-        if (num < 0) throw Error("Time element can't be negative");
+        Time.#validateParam(num);
 
         const min = this.getMinutes;
 
@@ -57,7 +90,8 @@ class Time {
     }
 
     set seconds(num) {
-        if (num < 0) throw Error("Time element can't be negative");
+        Time.#validateParam(num);
+
         const sec = this.getSeconds;
 
         this.#totalSec += num - sec;
@@ -123,8 +157,8 @@ class Time {
         else this.#totalSec -= time2.totalSeconds;
     }
 
-    toString(format = 'default') {
-        const result = [
+    toString(format = 'HH:MM:SS') {
+        const [hours, minutes, seconds] = [
             `${this.getHours}`.padStart(2, '0'),
             `${this.getMinutes}`.padStart(2, '0'),
             `${this.getSeconds}`.padStart(2, '0'),
@@ -136,42 +170,13 @@ class Time {
             );
         }
 
-        if (format === 'default') return result.join(':');
-        else {
-            let isValid = false;
-            let formattedResult = '';
+        format = format
+            .replace('HH', hours)
+            .replace('MM', minutes)
+            .replace('SS', seconds);
 
-            //todo change to replace
-            for (let i = 0; i < format.length; i++) {
-                switch (true) {
-                    case format.charAt(i) + format.charAt(i + 1) === 'HH':
-                        formattedResult += result[0];
-                        isValid = true;
-                        i++;
-                        break;
-                    case format.charAt(i) + format.charAt(i + 1) === 'MM':
-                        formattedResult += result[1];
-                        isValid = true;
-                        i++;
-                        break;
-                    case format.charAt(i) + format.charAt(i + 1) === 'SS':
-                        formattedResult += result[2];
-                        isValid = true;
-                        i++;
-                        break;
-                    default:
-                        formattedResult += format.charAt(i);
-                }
-            }
-
-            if (isValid === false) {
-                throw Error(
-                    'Format options must contain one of the following: HH/MM/SS'
-                );
-            }
-
-            return formattedResult;
-        }
+        return format;
     }
 }
+
 module.exports = Time;

@@ -688,7 +688,7 @@ describe('Time class tests', () => {
                 ['HHhrs', '10hrs'],
                 ['MMmins', '15mins'],
                 ['SSseconds', '30seconds'],
-                ['default', '10:15:30'],
+                [undefined, '10:15:30'],
             ])(
                 'The format option provided is: %s expected output: %s',
                 (format, res) => {
@@ -722,7 +722,9 @@ describe('Time class tests', () => {
                             minutes: 0,
                             hours: num,
                         });
-                    }).toThrow(Error("Time element can't be negative"));
+                    }).toThrow(
+                        Error('Time element must be a valid positive number')
+                    );
                 });
 
                 test.each([
@@ -742,7 +744,9 @@ describe('Time class tests', () => {
                             minutes: num,
                             hours: 0,
                         });
-                    }).toThrow(Error("Time element can't be negative"));
+                    }).toThrow(
+                        Error('Time element must be a valid positive number')
+                    );
                 });
 
                 test.each([
@@ -762,7 +766,9 @@ describe('Time class tests', () => {
                             minutes: 0,
                             hours: 0,
                         });
-                    }).toThrow(Error("Time element can't be negative"));
+                    }).toThrow(
+                        Error('Time element must be a valid positive number')
+                    );
                 });
             });
 
@@ -788,7 +794,11 @@ describe('Time class tests', () => {
 
                         expect(() => {
                             time1.hours = num;
-                        }).toThrow(Error("Time element can't be negative"));
+                        }).toThrow(
+                            Error(
+                                'Time element must be a valid positive number'
+                            )
+                        );
                     }
                 );
 
@@ -813,7 +823,11 @@ describe('Time class tests', () => {
 
                         expect(() => {
                             time1.minutes = num;
-                        }).toThrow(Error("Time element can't be negative"));
+                        }).toThrow(
+                            Error(
+                                'Time element must be a valid positive number'
+                            )
+                        );
                     }
                 );
 
@@ -838,7 +852,11 @@ describe('Time class tests', () => {
 
                         expect(() => {
                             time1.seconds = num;
-                        }).toThrow(Error("Time element can't be negative"));
+                        }).toThrow(
+                            Error(
+                                'Time element must be a valid positive number'
+                            )
+                        );
                     }
                 );
             });
@@ -897,12 +915,8 @@ describe('Time class tests', () => {
                 test.each([
                     [10],
                     [-1],
-                    [''],
                     [[1, 23, 4, 'a']],
                     [{ hours: 1, minutes: 9 }],
-                    ['justAstring'],
-                    ['afek'],
-                    ['hello'],
                     [['array']],
                 ])('The format option provided: %s is invalid', (format) => {
                     const time1 = new Time({
