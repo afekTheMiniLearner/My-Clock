@@ -17,13 +17,13 @@ describe('Time class tests', () => {
             });
 
             test.each([
-                [25, ['25', '00', '00']],
-                [48, ['48', '00', '00']],
                 [152, ['52', '00', '00']],
                 [100, ['00', '00', '00']],
-                [0, ['00', '00', '00']],
                 [5, ['05', '00', '00']],
-                [1, ['01', '00', '00']],
+                [0, ['00', '00', '00']],
+                [-5, ['-05', '00', '00']],
+                [-100, ['00', '00', '00']],
+                [-152, ['-52', '00', '00']],
             ])(
                 'creating time with %s hours should returns time: %s',
                 (num, result) => {
@@ -39,15 +39,13 @@ describe('Time class tests', () => {
             );
 
             test.each([
-                [1001, ['16', '41', '00']],
+                [1000, ['16', '40', '00']],
                 [100, ['01', '40', '00']],
-                [67, ['01', '07', '00']],
-                [53, ['00', '53', '00']],
-                [10, ['00', '10', '00']],
-                [22, ['00', '22', '00']],
                 [5, ['00', '05', '00']],
-                [1, ['00', '01', '00']],
                 [0, ['00', '00', '00']],
+                [-5, ['-00', '05', '00']],
+                [-100, ['-01', '40', '00']],
+                [-1000, ['-16', '40', '00']],
             ])(
                 'creating time with %s minutes should returns time: %s',
                 (num, result) => {
@@ -63,15 +61,13 @@ describe('Time class tests', () => {
             );
 
             test.each([
-                [96100, ['26', '41', '40']],
-                [16000, ['04', '26', '40']],
-                [5420, ['01', '30', '20']],
-                [4010, ['01', '06', '50']],
-                [305, ['00', '05', '05']],
-                [68, ['00', '01', '08']],
+                [5400, ['01', '30', '00']],
                 [40, ['00', '00', '40']],
-                [6, ['00', '00', '06']],
+                [5, ['00', '00', '05']],
                 [0, ['00', '00', '00']],
+                [-5, ['-00', '00', '05']],
+                [-40, ['-00', '00', '40']],
+                [-5400, ['-01', '30', '00']],
             ])(
                 'creating time with %s seconds should returns time: %s',
                 (num, result) => {
@@ -89,12 +85,11 @@ describe('Time class tests', () => {
 
         describe('get methods tests', () => {
             test.each([
-                [23, 23],
-                [0, 0],
-                [20, 20],
-                [10, 10],
-                [5, 5],
+                [40, 40],
                 [1, 1],
+                [0, 0],
+                [-1, -1],
+                [-40, -40],
             ])(
                 'get hours method for the time created with: %s hours, returns number: %s',
                 (num, res) => {
@@ -104,19 +99,16 @@ describe('Time class tests', () => {
                         hours: num,
                     });
 
-                    expect(time1.getHours).toBe(res);
+                    expect(time1.hours).toBe(res);
                 }
             );
 
             test.each([
-                [60, 0],
-                [59, 59],
-                [30, 30],
                 [20, 20],
-                [10, 10],
                 [5, 5],
-                [1, 1],
                 [0, 0],
+                [-5, -5],
+                [-20, -20],
             ])(
                 'get minutes method for the time created with: %s minutes, returns number: %s',
                 (num, res) => {
@@ -126,19 +118,16 @@ describe('Time class tests', () => {
                         hours: 0,
                     });
 
-                    expect(time1.getMinutes).toBe(res);
+                    expect(time1.minutes).toBe(res);
                 }
             );
 
             test.each([
-                [60, 0],
-                [59, 59],
-                [30, 30],
-                [20, 20],
-                [10, 10],
+                [55, 55],
                 [5, 5],
-                [1, 1],
                 [0, 0],
+                [-5, -5],
+                [-55, -55],
             ])(
                 'get seconds method for the time created with: %s seconds, returns number: %s',
                 (num, res) => {
@@ -148,18 +137,16 @@ describe('Time class tests', () => {
                         hours: 0,
                     });
 
-                    expect(time1.getSeconds).toBe(res);
+                    expect(time1.seconds).toBe(res);
                 }
             );
 
             test.each([
-                [2, 60, 10800],
                 [3, 30, 12600],
-                [0, 30, 1800],
                 [0, 15, 900],
-                [10, 0, 36000],
-                [0, 1, 60],
                 [0, 0, 0],
+                [0, -15, -900],
+                [-3, -30, -12600],
             ])(
                 'get method totalSeconds for time created with: %s hours and %s minutes, returns: %s',
                 (hrs, min, res) => {
@@ -176,13 +163,11 @@ describe('Time class tests', () => {
 
         describe('set methods tests', () => {
             test.each([
-                [23, ['23', '00', '00']],
                 [60, ['60', '00', '00']],
-                [20, ['20', '00', '00']],
-                [10, ['10', '00', '00']],
-                [5, ['05', '00', '00']],
-                [1, ['01', '00', '00']],
+                [15, ['15', '00', '00']],
                 [0, ['00', '00', '00']],
+                [-15, ['-15', '00', '00']],
+                [-60, ['-60', '00', '00']],
             ])(
                 'set hours method accepts number:%s and returns time: %s',
                 (num, res) => {
@@ -199,14 +184,11 @@ describe('Time class tests', () => {
             );
 
             test.each([
-                [60, ['01', '00', '00']],
-                [59, ['00', '59', '00']],
                 [30, ['00', '30', '00']],
-                [20, ['00', '20', '00']],
-                [10, ['00', '10', '00']],
-                [5, ['00', '05', '00']],
-                [1, ['00', '01', '00']],
+                [2, ['00', '02', '00']],
                 [0, ['00', '00', '00']],
+                [-2, ['-00', '02', '00']],
+                [-30, ['-00', '30', '00']],
             ])(
                 'set minutes method accepts number:%s and returns time: %s',
                 (num, res) => {
@@ -223,14 +205,11 @@ describe('Time class tests', () => {
             );
 
             test.each([
-                [60, ['00', '01', '00']],
-                [59, ['00', '00', '59']],
                 [30, ['00', '00', '30']],
-                [20, ['00', '00', '20']],
                 [10, ['00', '00', '10']],
-                [5, ['00', '00', '05']],
-                [1, ['00', '00', '01']],
                 [0, ['00', '00', '00']],
+                [-10, ['-00', '00', '10']],
+                [-30, ['-00', '00', '30']],
             ])(
                 'set seconds method accepts number:%s and returns time: %s',
                 (num, res) => {
@@ -249,21 +228,18 @@ describe('Time class tests', () => {
 
         describe('add/sub methods tests', () => {
             test.each([
-                [25, ['30', '05', '05']],
-                [48, ['53', '05', '05']],
-                [50, ['55', '05', '05']],
-                [10, ['15', '05', '05']],
-                [22, ['27', '05', '05']],
-                [5, ['10', '05', '05']],
-                [1, ['06', '05', '05']],
-                [0, ['05', '05', '05']],
+                [['05', '05', '05'], 10, ['15', '05', '05']],
+                [['-10', '00', '00'], 5, ['-05', '00', '00']],
+                [['10', '10', '10'], 0, ['10', '10', '10']],
+                /* ask hadriel if i should add
+                here option to add by negative number */
             ])(
-                'addHours method accepts number:%s and returns time: %s',
-                (num, res) => {
+                'addHours method for time: %s, accepts number:%s and returns time: %s',
+                (timeParams, num, res) => {
                     const time1 = new Time({
-                        seconds: 5,
-                        minutes: 5,
-                        hours: 5,
+                        seconds: +timeParams[2],
+                        minutes: +timeParams[1],
+                        hours: +timeParams[0],
                     });
                     time1.addHours(num);
 
@@ -273,22 +249,18 @@ describe('Time class tests', () => {
             );
 
             test.each([
-                [1001, ['16', '51', '25']],
-                [100, ['01', '50', '25']],
-                [67, ['01', '17', '25']],
-                [53, ['01', '03', '25']],
-                [10, ['00', '20', '25']],
-                [22, ['00', '32', '25']],
-                [5, ['00', '15', '25']],
-                [1, ['00', '11', '25']],
-                [0, ['00', '10', '25']],
+                [['01', '00', '30'], 50, ['01', '50', '30']],
+                [['-00', '15', '00'], 5, ['-00', '10', '00']],
+                [['00', '10', '00'], 0, ['00', '10', '00']],
+                /* ask hadriel if i should add
+                here option to add by negative number */
             ])(
-                'addMinutes method accepts number:%s and returns time: %s',
-                (num, res) => {
+                'addMinutes method for time: %s, accepts number:%s and returns time: %s',
+                (timeParams, num, res) => {
                     const time1 = new Time({
-                        seconds: 25,
-                        minutes: 10,
-                        hours: 0,
+                        seconds: +timeParams[2],
+                        minutes: +timeParams[1],
+                        hours: +timeParams[0],
                     });
                     time1.addMinutes(num);
 
@@ -298,23 +270,20 @@ describe('Time class tests', () => {
             );
 
             test.each([
-                [96100, ['28', '41', '40']],
-                [16000, ['06', '26', '40']],
-                [5420, ['03', '30', '20']],
-                [4010, ['03', '06', '50']],
-                [305, ['02', '05', '05']],
-                [68, ['02', '01', '08']],
-                [40, ['02', '00', '40']],
-                [6, ['02', '00', '06']],
-                [0, ['02', '00', '00']],
+                [['02', '05', '00'], 20, ['02', '05', '20']],
+                [['-15', '00', '30'], 30, ['-15', '00', '00']],
+                [['10', '00', '10'], 0, ['10', '00', '10']],
+                /* ask hadriel if i should add
+                here option to add by negative number */
             ])(
-                'addSeconds method accepts number:%s and returns time: %s',
-                (num, res) => {
+                'addSeconds method for time: %s, accepts number: %s and returns time: %s',
+                (timeParams, num, res) => {
                     const time1 = new Time({
-                        seconds: 0,
-                        minutes: 0,
-                        hours: 2,
+                        seconds: +timeParams[2],
+                        minutes: +timeParams[1],
+                        hours: +timeParams[0],
                     });
+
                     time1.addSeconds(num);
 
                     const arr = time1.toString().split(':');
@@ -323,6 +292,80 @@ describe('Time class tests', () => {
             );
 
             test.each([
+                [['27', '00', '00'], 2, ['25', '00', '00']],
+                [['3', '30', '50'], 5, ['00', '00', '00']],
+                [['50', '00', '00'], 0, ['50', '00', '00']],
+                [['15', '00', '00'], 10, ['05', '00', '00']],
+                [['13', '00', '00'], 6, ['07', '00', '00']],
+                [['00', '30', '00'], 1, ['00', '00', '00']],
+                /* ask hadriel if i should add
+                here option to add by negative number */
+            ])(
+                'subHours method created with %s time, accepts number:%s and returns time: %s',
+                (timeParams, num, res) => {
+                    const time1 = new Time({
+                        seconds: +timeParams[2],
+                        minutes: +timeParams[1],
+                        hours: +timeParams[0],
+                    });
+                    time1.subHours(num);
+
+                    const arr = time1.toString().split(':');
+                    expect(arr).toEqual(res);
+                }
+            );
+
+            test.each([
+                //add negatives
+                [['02', '00', '00'], 30, ['01', '30', '00']],
+                [['03', '30', '50'], 30, ['03', '00', '50']],
+                [['04', '00', '00'], 0, ['04', '00', '00']],
+                [['15', '60', '00'], 70, ['14', '50', '00']],
+                [['1', '30', '57'], 1000, ['00', '00', '00']],
+                [['00', '05', '120'], 6, ['00', '01', '00']],
+                [['00', '05', '100'], 6, ['00', '00', '40']],
+            ])(
+                'subMinutes method created with %s time, accepts number:%s and returns time: %s',
+                (initial, num, res) => {
+                    const time1 = new Time({
+                        seconds: +initial[2],
+                        minutes: +initial[1],
+                        hours: +initial[0],
+                    });
+                    time1.subMinutes(num);
+
+                    const arr = time1.toString().split(':');
+                    expect(arr).toEqual(res);
+                }
+            );
+
+            test.each([
+                //add negatives
+                [['22', '43', '40'], 96500, ['00', '00', '00']],
+                [['22', '43', '40'], 81000, ['00', '13', '40']],
+                [['10', '26', '60'], 16000, ['06', '00', '20']],
+                [['22', '00', '20'], 5420, ['20', '30', '00']],
+                [['01', '60', '40'], 4010, ['00', '53', '50']],
+                [['01', '30', '57'], 1000, ['01', '14', '17']],
+                [['20', '05', '100'], 50, ['20', '05', '50']],
+                [['00', '05', '100'], 10, ['00', '06', '30']],
+            ])(
+                'subSeconds method created with %s hours, accepts number:%s and returns time: %s',
+                (initial, num, res) => {
+                    const time1 = new Time({
+                        seconds: +initial[2],
+                        minutes: +initial[1],
+                        hours: +initial[0],
+                    });
+                    time1.subSeconds(num);
+
+                    const arr = time1.toString().split(':');
+                    expect(arr).toEqual(res);
+                }
+            );
+
+            test.each([
+                //add negatives
                 [
                     ['01', '30', '30'],
                     ['01', '20', '20'],
@@ -381,6 +424,7 @@ describe('Time class tests', () => {
             );
 
             test.each([
+                //add negatives
                 [
                     ['02', '50', '50'],
                     ['01', '30', '30'],
@@ -438,259 +482,196 @@ describe('Time class tests', () => {
                 }
             );
 
-            test.each([
-                [['27', '00', '00'], 2, ['25', '00', '00']],
-                [['3', '30', '50'], 5, ['00', '00', '00']],
-                [['50', '00', '00'], 0, ['50', '00', '00']],
-                [['15', '00', '00'], 10, ['05', '00', '00']],
-                [['13', '00', '00'], 6, ['07', '00', '00']],
-                [['00', '30', '00'], 1, ['00', '00', '00']],
-                [['22', '00', '00'], 12, ['10', '00', '00']],
-            ])(
-                'subHours method created with %s time, accepts number:%s and returns time: %s',
-                (initial, num, res) => {
-                    const time1 = new Time({
-                        seconds: +initial[2],
-                        minutes: +initial[1],
-                        hours: +initial[0],
-                    });
-                    time1.subHours(num);
+            describe('reset methods tests', () => {
+                test.each([
+                    //add negatives
+                    [
+                        ['23', '30', '00'],
+                        ['00', '30', '00'],
+                    ],
+                    [
+                        ['3', '30', '50'],
+                        ['00', '30', '50'],
+                    ],
+                    [
+                        ['50', '11', '43'],
+                        ['00', '11', '43'],
+                    ],
+                    [
+                        ['6', '00', '00'],
+                        ['00', '00', '00'],
+                    ],
+                    [
+                        ['13', '10', '00'],
+                        ['00', '10', '00'],
+                    ],
+                    [
+                        ['00', '30', '00'],
+                        ['00', '30', '00'],
+                    ],
+                    [
+                        ['01', '01', '01'],
+                        ['00', '01', '01'],
+                    ],
+                ])(
+                    'resetHours method created with %s time, returns time: %s',
+                    (initial, res) => {
+                        const time1 = new Time({
+                            seconds: +initial[2],
+                            minutes: +initial[1],
+                            hours: +initial[0],
+                        });
+                        time1.resetHours();
 
-                    const arr = time1.toString().split(':');
-                    expect(arr).toEqual(res);
-                }
-            );
+                        const arr = time1.toString().split(':');
+                        expect(arr).toEqual(res);
+                    }
+                );
 
-            test.each([
-                [['02', '00', '00'], 30, ['01', '30', '00']],
-                [['03', '30', '50'], 30, ['03', '00', '50']],
-                [['04', '00', '00'], 0, ['04', '00', '00']],
-                [['15', '60', '00'], 70, ['14', '50', '00']],
-                [['1', '30', '57'], 1000, ['00', '00', '00']],
-                [['00', '05', '120'], 6, ['00', '01', '00']],
-                [['00', '05', '100'], 6, ['00', '00', '40']],
-            ])(
-                'subMinutes method created with %s time, accepts number:%s and returns time: %s',
-                (initial, num, res) => {
-                    const time1 = new Time({
-                        seconds: +initial[2],
-                        minutes: +initial[1],
-                        hours: +initial[0],
-                    });
-                    time1.subMinutes(num);
+                test.each([
+                    //add negatives
+                    [
+                        ['23', '30', '00'],
+                        ['23', '00', '00'],
+                    ],
+                    [
+                        ['03', '30', '50'],
+                        ['03', '00', '50'],
+                    ],
+                    [
+                        ['50', '11', '43'],
+                        ['50', '00', '43'],
+                    ],
+                    [
+                        ['06', '00', '00'],
+                        ['06', '00', '00'],
+                    ],
+                    [
+                        ['13', '10', '00'],
+                        ['13', '00', '00'],
+                    ],
+                    [
+                        ['00', '30', '00'],
+                        ['00', '00', '00'],
+                    ],
+                    [
+                        ['01', '01', '01'],
+                        ['01', '00', '01'],
+                    ],
+                ])(
+                    'resetMinutes method created with %s time, returns time: %s',
+                    (initial, res) => {
+                        const time1 = new Time({
+                            seconds: +initial[2],
+                            minutes: +initial[1],
+                            hours: +initial[0],
+                        });
+                        time1.resetMinutes();
 
-                    const arr = time1.toString().split(':');
-                    expect(arr).toEqual(res);
-                }
-            );
+                        const arr = time1.toString().split(':');
+                        expect(arr).toEqual(res);
+                    }
+                );
 
-            test.each([
-                [['22', '43', '40'], 96500, ['00', '00', '00']],
-                [['22', '43', '40'], 81000, ['00', '13', '40']],
-                [['10', '26', '60'], 16000, ['06', '00', '20']],
-                [['22', '00', '20'], 5420, ['20', '30', '00']],
-                [['01', '60', '40'], 4010, ['00', '53', '50']],
-                [['01', '30', '57'], 1000, ['01', '14', '17']],
-                [['20', '05', '100'], 50, ['20', '05', '50']],
-                [['00', '05', '100'], 10, ['00', '06', '30']],
-            ])(
-                'subSeconds method created with %s hours, accepts number:%s and returns time: %s',
-                (initial, num, res) => {
-                    const time1 = new Time({
-                        seconds: +initial[2],
-                        minutes: +initial[1],
-                        hours: +initial[0],
-                    });
-                    time1.subSeconds(num);
+                test.each([
+                    //add negatives
+                    [
+                        ['23', '30', '50'],
+                        ['23', '30', '00'],
+                    ],
+                    [
+                        ['03', '30', '80'],
+                        ['03', '31', '00'],
+                    ],
+                    [
+                        ['50', '11', '43'],
+                        ['50', '11', '00'],
+                    ],
+                    [
+                        ['06', '02', '39'],
+                        ['06', '02', '00'],
+                    ],
+                    [
+                        ['13', '10', '00'],
+                        ['13', '10', '00'],
+                    ],
+                    [
+                        ['01', '30', '50'],
+                        ['01', '30', '00'],
+                    ],
+                    [
+                        ['01', '01', '01'],
+                        ['01', '01', '00'],
+                    ],
+                ])(
+                    'resetSeconds method created with %s time, returns time: %s',
+                    (initial, res) => {
+                        const time1 = new Time({
+                            seconds: +initial[2],
+                            minutes: +initial[1],
+                            hours: +initial[0],
+                        });
+                        time1.resetSeconds();
 
-                    const arr = time1.toString().split(':');
-                    expect(arr).toEqual(res);
-                }
-            );
+                        const arr = time1.toString().split(':');
+                        expect(arr).toEqual(res);
+                    }
+                );
 
-            test.each([
-                [
-                    ['23', '30', '00'],
-                    ['00', '30', '00'],
-                ],
-                [
-                    ['3', '30', '50'],
-                    ['00', '30', '50'],
-                ],
-                [
-                    ['50', '11', '43'],
-                    ['00', '11', '43'],
-                ],
-                [
-                    ['6', '00', '00'],
-                    ['00', '00', '00'],
-                ],
-                [
-                    ['13', '10', '00'],
-                    ['00', '10', '00'],
-                ],
-                [
-                    ['00', '30', '00'],
-                    ['00', '30', '00'],
-                ],
-                [
-                    ['01', '01', '01'],
-                    ['00', '01', '01'],
-                ],
-            ])(
-                'resetHours method created with %s time, returns time: %s',
-                (initial, res) => {
-                    const time1 = new Time({
-                        seconds: +initial[2],
-                        minutes: +initial[1],
-                        hours: +initial[0],
-                    });
-                    time1.resetHours();
+                test.each([
+                    //add negatives
+                    [
+                        ['23', '30', '50'],
+                        ['00', '00', '00'],
+                    ],
+                    [
+                        ['00', '00', '00'],
+                        ['00', '00', '00'],
+                    ],
+                    [
+                        ['03', '30', '80'],
+                        ['00', '00', '00'],
+                    ],
+                    [
+                        ['50', '11', '43'],
+                        ['00', '00', '00'],
+                    ],
+                    [
+                        ['06', '02', '39'],
+                        ['00', '00', '00'],
+                    ],
+                    [
+                        ['13', '10', '00'],
+                        ['00', '00', '00'],
+                    ],
+                    [
+                        ['01', '30', '60'],
+                        ['00', '00', '00'],
+                    ],
+                    [
+                        ['01', '01', '01'],
+                        ['00', '00', '00'],
+                    ],
+                ])(
+                    'reset method created with %s time, returns time: %s',
+                    (initial, res) => {
+                        const time1 = new Time({
+                            seconds: +initial[2],
+                            minutes: +initial[1],
+                            hours: +initial[0],
+                        });
+                        time1.reset();
 
-                    const arr = time1.toString().split(':');
-                    expect(arr).toEqual(res);
-                }
-            );
-
-            test.each([
-                [
-                    ['23', '30', '00'],
-                    ['23', '00', '00'],
-                ],
-                [
-                    ['03', '30', '50'],
-                    ['03', '00', '50'],
-                ],
-                [
-                    ['50', '11', '43'],
-                    ['50', '00', '43'],
-                ],
-                [
-                    ['06', '00', '00'],
-                    ['06', '00', '00'],
-                ],
-                [
-                    ['13', '10', '00'],
-                    ['13', '00', '00'],
-                ],
-                [
-                    ['00', '30', '00'],
-                    ['00', '00', '00'],
-                ],
-                [
-                    ['01', '01', '01'],
-                    ['01', '00', '01'],
-                ],
-            ])(
-                'resetMinutes method created with %s time, returns time: %s',
-                (initial, res) => {
-                    const time1 = new Time({
-                        seconds: +initial[2],
-                        minutes: +initial[1],
-                        hours: +initial[0],
-                    });
-                    time1.resetMinutes();
-
-                    const arr = time1.toString().split(':');
-                    expect(arr).toEqual(res);
-                }
-            );
-
-            test.each([
-                [
-                    ['23', '30', '50'],
-                    ['23', '30', '00'],
-                ],
-                [
-                    ['03', '30', '80'],
-                    ['03', '31', '00'],
-                ],
-                [
-                    ['50', '11', '43'],
-                    ['50', '11', '00'],
-                ],
-                [
-                    ['06', '02', '39'],
-                    ['06', '02', '00'],
-                ],
-                [
-                    ['13', '10', '00'],
-                    ['13', '10', '00'],
-                ],
-                [
-                    ['01', '30', '50'],
-                    ['01', '30', '00'],
-                ],
-                [
-                    ['01', '01', '01'],
-                    ['01', '01', '00'],
-                ],
-            ])(
-                'resetSeconds method created with %s time, returns time: %s',
-                (initial, res) => {
-                    const time1 = new Time({
-                        seconds: +initial[2],
-                        minutes: +initial[1],
-                        hours: +initial[0],
-                    });
-                    time1.resetSeconds();
-
-                    const arr = time1.toString().split(':');
-                    expect(arr).toEqual(res);
-                }
-            );
-
-            test.each([
-                [
-                    ['23', '30', '50'],
-                    ['00', '00', '00'],
-                ],
-                [
-                    ['00', '00', '00'],
-                    ['00', '00', '00'],
-                ],
-                [
-                    ['03', '30', '80'],
-                    ['00', '00', '00'],
-                ],
-                [
-                    ['50', '11', '43'],
-                    ['00', '00', '00'],
-                ],
-                [
-                    ['06', '02', '39'],
-                    ['00', '00', '00'],
-                ],
-                [
-                    ['13', '10', '00'],
-                    ['00', '00', '00'],
-                ],
-                [
-                    ['01', '30', '60'],
-                    ['00', '00', '00'],
-                ],
-                [
-                    ['01', '01', '01'],
-                    ['00', '00', '00'],
-                ],
-            ])(
-                'reset method created with %s time, returns time: %s',
-                (initial, res) => {
-                    const time1 = new Time({
-                        seconds: +initial[2],
-                        minutes: +initial[1],
-                        hours: +initial[0],
-                    });
-                    time1.reset();
-
-                    const arr = time1.toString().split(':');
-                    expect(arr).toEqual(res);
-                }
-            );
+                        const arr = time1.toString().split(':');
+                        expect(arr).toEqual(res);
+                    }
+                );
+            });
         });
 
         describe('toString method tests', () => {
             test.each([
+                //add negatives
                 ['HH:MM:SS', '10:15:30'],
                 ['HHhours:MMminutes:SSseconds', '10hours:15minutes:30seconds'],
                 ['HHh:MMm:SSs', '10h:15m:30s'],
@@ -716,6 +697,7 @@ describe('Time class tests', () => {
         describe('invalid cases', () => {
             describe('creation invalid tests', () => {
                 test.each([
+                    // add invalid- remove negative
                     [-9],
                     [-5],
                     [-300],
@@ -738,6 +720,7 @@ describe('Time class tests', () => {
                 });
 
                 test.each([
+                    // add invalid- remove negative
                     [-9],
                     [-5],
                     [-300],
@@ -760,6 +743,7 @@ describe('Time class tests', () => {
                 });
 
                 test.each([
+                    // add invalid- remove negative
                     [-9],
                     [-5],
                     [-300],
@@ -784,6 +768,7 @@ describe('Time class tests', () => {
 
             describe('set methods invalid tests', () => {
                 test.each([
+                    // add invalid- remove negative
                     [-9],
                     [-5],
                     [-300],
@@ -813,6 +798,7 @@ describe('Time class tests', () => {
                 );
 
                 test.each([
+                    // add invalid- remove negative
                     [-9],
                     [-5],
                     [-300],
@@ -842,6 +828,7 @@ describe('Time class tests', () => {
                 );
 
                 test.each([
+                    // add invalid- remove negative
                     [-9],
                     [-5],
                     [-300],
@@ -873,6 +860,7 @@ describe('Time class tests', () => {
 
             describe('add/sub methods invalid tests', () => {
                 test.each([
+                    // add invalid- remove negative
                     [['01', '30', '30'], []],
                     [['02', '30', '30'], 6],
                     [['10', '01', '20'], 'hello'],
@@ -897,6 +885,7 @@ describe('Time class tests', () => {
                 );
 
                 test.each([
+                    // add invalid- remove negative
                     [['01', '30', '30'], []],
                     [['02', '30', '30'], 6],
                     [['10', '01', '20'], 'hello'],
@@ -923,6 +912,7 @@ describe('Time class tests', () => {
 
             describe('toString method invalid tests', () => {
                 test.each([
+                    // add invalid - remove negative
                     [10],
                     [-1],
                     [[1, 23, 4, 'a']],
