@@ -250,7 +250,7 @@ describe('Time class tests', () => {
 
             test.each([
                 [['01', '00', '30'], 50, ['01', '50', '30']],
-                [['-00', '15', '00'], 5, ['-00', '10', '00']],
+                [['00', '-15', '00'], 5, ['-00', '10', '00']],
                 [['00', '10', '00'], 0, ['00', '10', '00']],
                 /* ask hadriel if i should add
                 here option to add by negative number */
@@ -271,7 +271,7 @@ describe('Time class tests', () => {
 
             test.each([
                 [['02', '05', '00'], 20, ['02', '05', '20']],
-                [['-15', '00', '30'], 30, ['-15', '00', '00']],
+                [['-15', '00', '-30'], 30, ['-15', '00', '00']],
                 [['10', '00', '10'], 0, ['10', '00', '10']],
                 /* ask hadriel if i should add
                 here option to add by negative number */

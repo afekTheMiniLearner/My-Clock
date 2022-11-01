@@ -1,5 +1,6 @@
 totalSecondsToHours = function (sec) {
-    return ~~((sec / 60 / 60) % 100);
+    const res = ~~(sec / 60 / 60);
+    return res;
 };
 
 totalSecondsToMinutes = function (sec) {
@@ -14,8 +15,9 @@ timeParamsToTotalSeconds = function (seconds, minutes, hours) {
     seconds = seconds ?? 0;
     minutes = minutes ?? 0;
     hours = hours ?? 0;
+    const result = seconds + minutes * 60 + hours * 3600;
 
-    return seconds + minutes * 60 + hours * 3600;
+    return result < 0 ? result % -360000 : result % 360000;
 };
 
 currentTimeToTotalSeconds = function () {
@@ -28,22 +30,34 @@ currentTimeToTotalSeconds = function () {
     );
 };
 
-changeHours = function (seconds, setHours) {
+setHours = function (seconds, setHours) {
     return setHours < 0
         ? seconds + setHours * 3600 + totalSecondsToHours(seconds) * 3600
         : seconds + setHours * 3600 - totalSecondsToHours(seconds) * 3600;
 };
 
-changeMinutes = function (seconds, setMinutes) {
+setMinutes = function (seconds, setMinutes) {
     return setMinutes < 0
         ? seconds + setMinutes * 60 + totalSecondsToMinutes(seconds) * 60
         : seconds + setMinutes * 60 - totalSecondsToMinutes(seconds) * 60;
 };
 
-changeSeconds = function (seconds, setSeconds) {
+setSeconds = function (seconds, setSeconds) {
     return setSeconds < 0
         ? seconds + setSeconds + totalSecondsToSeconds(seconds)
         : seconds + setSeconds - totalSecondsToSeconds(seconds);
+};
+
+addHoursToTotalSeconds = function (seconds, num) {
+    return seconds + (num % 100) * 3600;
+};
+
+addMinutesToTotalSeconds = function (seconds, num) {
+    return seconds + num * 60;
+};
+
+addSecondsToTotalSeconds = function (seconds, num) {
+    return seconds + num;
 };
 
 module.exports = {
@@ -52,7 +66,10 @@ module.exports = {
     totalSecondsToSeconds,
     timeParamsToTotalSeconds,
     currentTimeToTotalSeconds,
-    changeHours,
-    changeMinutes,
-    changeSeconds,
+    setHours,
+    setMinutes,
+    setSeconds,
+    addHoursToTotalSeconds,
+    addMinutesToTotalSeconds,
+    addSecondsToTotalSeconds,
 };

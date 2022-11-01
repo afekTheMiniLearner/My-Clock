@@ -5,9 +5,12 @@ const {
     totalSecondsToSeconds,
     timeParamsToTotalSeconds,
     currentTimeToTotalSeconds,
-    changeHours,
-    changeMinutes,
-    changeSeconds,
+    setHours,
+    setMinutes,
+    setSeconds,
+    addHoursToTotalSeconds,
+    addMinutesToTotalSeconds,
+    addSecondsToTotalSeconds,
 } = require('./utils/calculators');
 const { validateParam } = require('./utils/validators');
 
@@ -44,37 +47,37 @@ class Time {
     set hours(num) {
         validateParam(num, false);
 
-        this.#seconds = changeHours(this.#seconds, num);
+        this.#seconds = setHours(this.#seconds, num);
     }
 
     set minutes(num) {
         validateParam(num, false);
 
-        this.#seconds = changeMinutes(this.#seconds, num);
+        this.#seconds = setMinutes(this.#seconds, num);
     }
 
     set seconds(num) {
         validateParam(num, false);
 
-        this.#seconds = changeSeconds(this.#seconds, num);
+        this.#seconds = setSeconds(this.#seconds, num);
     }
 
     addHours(num) {
         validateParam(num, false);
 
-        this.#seconds += (num % 100) * 3600;
+        this.#seconds = addHoursToTotalSeconds(this.#seconds, num);
     }
 
     addMinutes(num) {
         validateParam(num, false);
 
-        this.#seconds += num * 60;
+        this.#seconds = addMinutesToTotalSeconds(this.#seconds, num);
     }
 
     addSeconds(num) {
         validateParam(num, false);
 
-        this.#seconds += num;
+        this.#seconds = addSecondsToTotalSeconds(this.#seconds, num);
     }
 
     subHours(num) {
@@ -138,10 +141,15 @@ class Time {
             );
         }
 
+        const replaceHours =
+            this.#seconds < 0
+                ? `${Math.abs(this.hours)}`.padStart(3, '-0')
+                : `${this.hours}`.padStart(2, '0');
+
         return format
-            .replace('HH', `${this.hours}`.padStart(2, '0'))
-            .replace('MM', `${this.minutes}`.padStart(2, '0'))
-            .replace('SS', `${this.seconds}`.padStart(2, '0'));
+            .replace('MM', `${Math.abs(this.minutes)}`.padStart(2, '0'))
+            .replace('SS', `${Math.abs(this.seconds)}`.padStart(2, '0'))
+            .replace('HH', replaceHours);
     }
 }
 
