@@ -37,6 +37,7 @@ setHours = function (seconds, setHours) {
 };
 
 setMinutes = function (seconds, setMinutes) {
+    //change to minutes
     return setMinutes < 0
         ? seconds + setMinutes * 60 + totalSecondsToMinutes(seconds) * 60
         : seconds + setMinutes * 60 - totalSecondsToMinutes(seconds) * 60;
