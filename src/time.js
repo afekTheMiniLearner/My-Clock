@@ -11,6 +11,7 @@ const {
     addHoursToTotalSeconds,
     addMinutesToTotalSeconds,
     addSecondsToTotalSeconds,
+    timeLimitCheck,
 } = require('./utils/calculators');
 const { validateParam } = require('./utils/validators');
 
@@ -83,22 +84,19 @@ class Time {
     subHours(num) {
         validateParam(num, false);
 
-        if (this.#seconds - (num % 100) * 3600 < 0) this.#seconds = 0;
-        else this.#seconds -= (num % 100) * 3600;
+        this.#seconds -= (num % 100) * 3600;
     }
 
     subMinutes(num) {
         validateParam(num, false);
 
-        if (this.#seconds - num * 60 < 0) this.#seconds = 0;
-        else this.#seconds -= num * 60;
+        this.#seconds -= num * 60;
     }
 
     subSeconds(num) {
         validateParam(num, false);
 
-        if (this.#seconds - num < 0) this.#seconds = 0;
-        else this.#seconds -= num;
+        this.#seconds -= num;
     }
 
     resetSeconds() {
@@ -134,12 +132,18 @@ class Time {
         else this.#seconds -= time2.totalSeconds;
     }
 
+    setTotalSeconds(num) {
+        this.#seconds = num;
+    }
+
     toString(format = 'HH:MM:SS') {
         if (typeof format !== 'string') {
             throw Error(
                 'Format options must contain one of the following: HH/MM/SS'
             );
         }
+
+        this.#seconds = timeLimitCheck(this.#seconds);
 
         const replaceHours =
             this.#seconds < 0

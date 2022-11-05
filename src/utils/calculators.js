@@ -60,6 +60,19 @@ addSecondsToTotalSeconds = function (seconds, num) {
     return seconds + num;
 };
 
+timeLimitCheck = function (seconds) {
+    return seconds > 0 ? seconds % 360000 : seconds % -360000;
+};
+
+countDown = function (start, total) {
+    const intervalID = setInterval(() => {
+        if (start === false || total === 0) {
+            clearInterval(intervalID);
+            return total;
+        } else total--;
+    }, 1000);
+};
+
 module.exports = {
     totalSecondsToHours,
     totalSecondsToMinutes,
@@ -72,4 +85,6 @@ module.exports = {
     addHoursToTotalSeconds,
     addMinutesToTotalSeconds,
     addSecondsToTotalSeconds,
+    timeLimitCheck,
+    countDown,
 };
