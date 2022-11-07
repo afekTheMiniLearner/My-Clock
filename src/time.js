@@ -1,4 +1,3 @@
-// time range -99:59:59 - +99:59:59
 const {
     totalSecondsToHours,
     totalSecondsToMinutes,
@@ -26,7 +25,7 @@ class Time {
         this.#seconds =
             seconds === null && minutes === null && hours === null
                 ? currentTimeToTotalSeconds()
-                : timeParamsToTotalSeconds(seconds, minutes, hours);
+                : timeParamsToTotalSeconds({ seconds, minutes, hours });
     }
 
     get hours() {
@@ -45,10 +44,18 @@ class Time {
         return this.#seconds;
     }
 
-    set hours(num) {
+    set hours(hours) {
         validateParam(num, false);
 
-        this.#seconds = setHours(this.#seconds, num);
+        sign = hours < 0 ? -1 : 1;
+
+        const temp = new Time({
+            hours: hours,
+            minutes: this.minutes,
+            secnods: this.secnods,
+        });
+
+        this.#seconds += temp.totalSeconds * sign;
     }
 
     set minutes(num) {
