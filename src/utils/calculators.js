@@ -1,24 +1,17 @@
-const Time = require('../time');
+const convertSecondsToHoursUnit = (module.exports.convertSecondsToHoursUnit =
+    function (sec) {
+        return (res = ~~(sec / 60 / 60));
+    });
 
-const totalSecondsToHours = (module.exports.totalSecondsToHours = function (
-    sec
-) {
-    const res = ~~(sec / 60 / 60);
-    return res;
-});
+const convertSecondsToMinutesUnit =
+    (module.exports.convertSecondsToMinutesUnit = function (sec) {
+        return ~~((sec / 60) % 60);
+    });
 
-//convert change name
-const totalSecondsToMinutes = (module.exports.totalSecondsToMinutes = function (
-    sec
-) {
-    return ~~((sec / 60) % 60);
-});
-
-const totalSecondsToSeconds = (module.exports.totalSecondsToSeconds = function (
-    sec
-) {
-    return ~~((sec % 60) % 60);
-});
+const convertSecondsToSecondsUnit =
+    (module.exports.convertSecondsToSecondsUnit = function (sec) {
+        return ~~((sec % 60) % 60);
+    });
 
 const timeParamsToTotalSeconds = (module.exports.timeParamsToTotalSeconds =
     function ({ seconds, minutes, hours } = {}) {
@@ -40,33 +33,6 @@ const currentTimeToTotalSeconds = (module.exports.currentTimeToTotalSeconds =
             seconds: now.getSeconds(),
         });
     });
-
-// todo change to += difference
-
-const setHours = (module.exports.setHours = function (time, setHours) {
-    return setHours < 0
-        ? seconds + setHours * 3600 + totalSecondsToHours(seconds) * 3600
-        : seconds + setHours * 3600 - totalSecondsToHours(seconds) * 3600;
-});
-
-const setHoursOld = (module.exports.setHours = function (seconds, setHours) {
-    return setHours < 0
-        ? seconds + setHours * 3600 + totalSecondsToHours(seconds) * 3600
-        : seconds + setHours * 3600 - totalSecondsToHours(seconds) * 3600;
-});
-
-const setMinutes = (module.exports.setMinutes = function (seconds, setMinutes) {
-    // change to minutes
-    return setMinutes < 0
-        ? seconds + setMinutes * 60 + totalSecondsToMinutes(seconds) * 60
-        : seconds + setMinutes * 60 - totalSecondsToMinutes(seconds) * 60;
-});
-
-const setSeconds = (module.exports.setSeconds = function (seconds, setSeconds) {
-    return setSeconds < 0
-        ? seconds + setSeconds + totalSecondsToSeconds(seconds)
-        : seconds + setSeconds - totalSecondsToSeconds(seconds);
-});
 
 const addHoursToTotalSeconds = (module.exports.addHoursToTotalSeconds =
     function (seconds, num) {
@@ -97,14 +63,11 @@ const countDown = (module.exports.countDown = function (start, total) {
 });
 
 module.exports = {
-    totalSecondsToHours,
-    totalSecondsToMinutes,
-    totalSecondsToSeconds,
+    convertSecondsToHoursUnit,
+    convertSecondsToMinutesUnit,
+    convertSecondsToSecondsUnit,
     timeParamsToTotalSeconds,
     currentTimeToTotalSeconds,
-    setHours,
-    setMinutes,
-    setSeconds,
     addHoursToTotalSeconds,
     addMinutesToTotalSeconds,
     addSecondsToTotalSeconds,

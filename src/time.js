@@ -1,12 +1,9 @@
 const {
-    totalSecondsToHours,
-    totalSecondsToMinutes,
-    totalSecondsToSeconds,
+    convertSecondsToHoursUnit,
+    convertSecondsToMinutesUnit,
+    convertSecondsToSecondsUnit,
     timeParamsToTotalSeconds,
     currentTimeToTotalSeconds,
-    setHours,
-    setMinutes,
-    setSeconds,
     addHoursToTotalSeconds,
     addMinutesToTotalSeconds,
     addSecondsToTotalSeconds,
@@ -29,15 +26,15 @@ class Time {
     }
 
     get hours() {
-        return totalSecondsToHours(this.#seconds);
+        return convertSecondsToHoursUnit(this.#seconds);
     }
 
     get minutes() {
-        return totalSecondsToMinutes(this.#seconds);
+        return convertSecondsToMinutesUnit(this.#seconds);
     }
 
     get seconds() {
-        return totalSecondsToSeconds(this.#seconds);
+        return convertSecondsToSecondsUnit(this.#seconds);
     }
 
     get totalSeconds() {
@@ -45,7 +42,7 @@ class Time {
     }
 
     set hours(hours) {
-        validateParam(num, false);
+        validateParam(hours, false);
 
         sign = hours < 0 ? -1 : 1;
 
@@ -58,16 +55,32 @@ class Time {
         this.#seconds += temp.totalSeconds * sign;
     }
 
-    set minutes(num) {
-        validateParam(num, false);
+    set minutes(minutes) {
+        validateParam(minutes, false);
 
-        this.#seconds = setMinutes(this.#seconds, num);
+        sign = minutes < 0 ? -1 : 1;
+
+        const temp = new Time({
+            hours: this.hours,
+            minutes: minutes,
+            secnods: this.secnods,
+        });
+
+        this.#seconds += temp.totalSeconds * sign;
     }
 
-    set seconds(num) {
-        validateParam(num, false);
+    set seconds(seconds) {
+        validateParam(seconds, false);
 
-        this.#seconds = setSeconds(this.#seconds, num);
+        sign = seconds < 0 ? -1 : 1;
+
+        const temp = new Time({
+            hours: this.hours,
+            minutes: this.minutes,
+            secnods: seconds,
+        });
+
+        this.#seconds += temp.totalSeconds * sign;
     }
 
     addHours(num) {
