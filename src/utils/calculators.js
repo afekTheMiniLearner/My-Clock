@@ -1,3 +1,8 @@
+const limitTime = (module.exports.limitTime = function (sec) {
+    if (sec > 359999) return 359999;
+    else if (sec < -359999) return -359999;
+});
+
 const convertSecondsToHoursUnit = (module.exports.convertSecondsToHoursUnit =
     function (sec) {
         return (res = ~~(sec / 60 / 60));
@@ -18,9 +23,9 @@ const timeParamsToTotalSeconds = (module.exports.timeParamsToTotalSeconds =
         seconds = seconds ?? 0;
         minutes = minutes ?? 0;
         hours = hours ?? 0;
-        const result = seconds + minutes * 60 + hours * 3600;
 
-        return result < 0 ? result % -360000 : result % 360000;
+        const result = seconds + minutes * 60 + hours * 3600;
+        return limitTime(result);
     });
 
 const currentTimeToTotalSeconds = (module.exports.currentTimeToTotalSeconds =
@@ -34,20 +39,17 @@ const currentTimeToTotalSeconds = (module.exports.currentTimeToTotalSeconds =
         });
     });
 
-const addHoursToTotalSeconds = (module.exports.addHoursToTotalSeconds =
-    function (seconds, num) {
-        return seconds + (num % 100) * 3600;
-    });
+const hoursToTotalSeconds = (module.exports.hoursToTotalSeconds = function (
+    hours
+) {
+    return (hours % 100) * 3600;
+});
 
-const addMinutesToTotalSeconds = (module.exports.addMinutesToTotalSeconds =
-    function (seconds, num) {
-        return seconds + num * 60;
-    });
-
-const addSecondsToTotalSeconds = (module.exports.addSecondsToTotalSeconds =
-    function (seconds, num) {
-        return seconds + num;
-    });
+const minutesToTotalSeconds = (module.exports.minutesToTotalSeconds = function (
+    minutes
+) {
+    return minutes * 60;
+});
 
 const timeLimitCheck = (module.exports.timeLimitCheck = function (seconds) {
     return seconds > 0 ? seconds % 360000 : seconds % -360000;
@@ -61,16 +63,3 @@ const countDown = (module.exports.countDown = function (start, total) {
         } else total--;
     }, 1000);
 });
-
-module.exports = {
-    convertSecondsToHoursUnit,
-    convertSecondsToMinutesUnit,
-    convertSecondsToSecondsUnit,
-    timeParamsToTotalSeconds,
-    currentTimeToTotalSeconds,
-    addHoursToTotalSeconds,
-    addMinutesToTotalSeconds,
-    addSecondsToTotalSeconds,
-    timeLimitCheck,
-    countDown,
-};

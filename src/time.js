@@ -4,10 +4,9 @@ const {
     convertSecondsToSecondsUnit,
     timeParamsToTotalSeconds,
     currentTimeToTotalSeconds,
-    addHoursToTotalSeconds,
-    addMinutesToTotalSeconds,
-    addSecondsToTotalSeconds,
-    timeLimitCheck,
+    hoursToTotalSeconds,
+    minutesToTotalSeconds,
+    limitTime,
 } = require('./utils/calculators');
 const { validateParam } = require('./utils/validators');
 
@@ -53,6 +52,7 @@ class Time {
         });
 
         this.#seconds += temp.totalSeconds * sign;
+        this.#seconds = limitTime(this.#seconds);
     }
 
     set minutes(minutes) {
@@ -67,6 +67,7 @@ class Time {
         });
 
         this.#seconds += temp.totalSeconds * sign;
+        this.#seconds = limitTime(this.#seconds);
     }
 
     set seconds(seconds) {
@@ -81,54 +82,61 @@ class Time {
         });
 
         this.#seconds += temp.totalSeconds * sign;
+        this.#seconds = limitTime(this.#seconds);
     }
 
-    addHours(num) {
-        validateParam(num, false);
+    addHours(hours) {
+        validateParam(hours, false);
 
-        this.#seconds = addHoursToTotalSeconds(this.#seconds, num);
+        this.#seconds = hoursToTotalSeconds(hours);
+        this.#seconds = limitTime(this.#seconds);
     }
 
-    addMinutes(num) {
-        validateParam(num, false);
+    addMinutes(minutes) {
+        validateParam(minutes, false);
 
-        this.#seconds = addMinutesToTotalSeconds(this.#seconds, num);
+        this.#seconds += minutesToTotalSeconds(minutes);
+        this.#seconds = limitTime(this.#seconds);
     }
 
-    addSeconds(num) {
-        validateParam(num, false);
+    addSeconds(seconds) {
+        validateParam(seconds, false);
 
-        this.#seconds = addSecondsToTotalSeconds(this.#seconds, num);
+        this.#seconds += seconds;
+        this.#seconds = limitTime(this.#seconds);
     }
 
-    subHours(num) {
-        validateParam(num, false);
+    subHours(hours) {
+        validateParam(hours, false);
 
-        this.#seconds -= (num % 100) * 3600;
+        this.#seconds -= hoursToTotalSeconds(hours);
+        this.#seconds = limitTime(this.#seconds);
     }
 
-    subMinutes(num) {
-        validateParam(num, false);
+    subMinutes(minutes) {
+        validateParam(minutes, false);
 
-        this.#seconds -= num * 60;
+        this.#seconds -= minutesToTotalSeconds(minutes);
+        this.#seconds = limitTime(this.#seconds);
     }
 
-    subSeconds(num) {
-        validateParam(num, false);
+    subSeconds(seconds) {
+        validateParam(seconds, false);
 
-        this.#seconds -= num;
+        this.#seconds -= seconds;
+        this.#seconds = limitTime(this.#seconds);
     }
 
-    resetSeconds() {
-        this.#seconds -= this.seconds;
+    resetHours() {
+        this.#seconds -= this.hours * 3600;
     }
 
     resetMinutes() {
         this.#seconds -= this.minutes * 60;
     }
 
-    resetHours() {
-        this.#seconds -= this.hours * 3600;
+    resetSeconds() {
+        this.#seconds -= this.seconds;
     }
 
     reset() {
@@ -141,6 +149,7 @@ class Time {
         }
 
         this.#seconds += time2.totalSeconds;
+        this.#seconds = limitTime(this.#seconds);
     }
 
     subTime(time2) {
@@ -148,8 +157,8 @@ class Time {
             throw Error('Invalid time input');
         }
 
-        if (this.#seconds - time2.totalSeconds < 0) this.#seconds = 0;
-        else this.#seconds -= time2.totalSeconds;
+        this.#seconds -= time2.totalSeconds;
+        this.#seconds = limitTime(this.#seconds);
     }
 
     setTotalSeconds(num) {
@@ -163,7 +172,7 @@ class Time {
             );
         }
 
-        this.#seconds = timeLimitCheck(this.#seconds);
+        this.#seconds = limitTime(this.#seconds);
 
         const replaceHours =
             this.#seconds < 0
