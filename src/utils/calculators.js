@@ -1,8 +1,3 @@
-const limitTime = (module.exports.limitTime = function (sec) {
-    if (sec > 359999) return 359999;
-    else if (sec < -359999) return -359999;
-});
-
 const convertSecondsToHoursUnit = (module.exports.convertSecondsToHoursUnit =
     function (sec) {
         return (res = ~~(sec / 60 / 60));
@@ -26,6 +21,7 @@ const timeParamsToTotalSeconds = (module.exports.timeParamsToTotalSeconds =
 
         const result = seconds + minutes * 60 + hours * 3600;
         return limitTime(result);
+        // using limit Time
     });
 
 const currentTimeToTotalSeconds = (module.exports.currentTimeToTotalSeconds =
