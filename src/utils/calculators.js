@@ -28,6 +28,7 @@ const currentTimeToTotalSeconds = (module.exports.currentTimeToTotalSeconds =
     function () {
         const now = new Date();
 
+        //here 2
         return timeParamsToTotalSeconds({
             hours: now.getHours(),
             minutes: now.getMinutes(),
