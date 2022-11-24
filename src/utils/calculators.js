@@ -19,16 +19,13 @@ const timeParamsToTotalSeconds = (module.exports.timeParamsToTotalSeconds =
         minutes = minutes ?? 0;
         hours = hours ?? 0;
 
-        const result = seconds + minutes * 60 + hours * 3600;
-        return limitTime(result);
-        // using limit Time
+        return seconds + minutes * 60 + hours * 3600;
     });
 
 const currentTimeToTotalSeconds = (module.exports.currentTimeToTotalSeconds =
     function () {
         const now = new Date();
 
-        //here 2
         return timeParamsToTotalSeconds({
             hours: now.getHours(),
             minutes: now.getMinutes(),

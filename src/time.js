@@ -9,9 +9,6 @@ const {
 } = require('./utils/calculators');
 const { validateParam } = require('./utils/validators');
 
-// todo - create Static variable of maxTime
-// todo -change limit time to method that modify the total
-// seconds with this.
 class Time {
     #seconds;
 
@@ -27,11 +24,12 @@ class Time {
             seconds === null && minutes === null && hours === null
                 ? currentTimeToTotalSeconds()
                 : timeParamsToTotalSeconds({ seconds, minutes, hours });
+        this.validateLimiter();
     }
 
     validateLimiter() {
-        if (this.#seconds > 359999) this.#seconds = 359999;
-        else if (this.#seconds < -359999) this.#seconds = -359999;
+        if (this.#seconds > Time.maxSeconds) this.#seconds = 359999;
+        else if (this.#seconds < Time.minSeconds) this.#seconds = -359999;
     }
 
     get hours() {
