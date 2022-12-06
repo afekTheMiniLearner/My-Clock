@@ -45,10 +45,6 @@ const minutesToTotalSeconds = (module.exports.minutesToTotalSeconds = function (
     return minutes * 60;
 });
 
-const timeLimitCheck = (module.exports.timeLimitCheck = function (seconds) {
-    return seconds > 0 ? seconds % 360000 : seconds % -360000;
-});
-
 const countDown = (module.exports.countDown = function (start, total) {
     const intervalID = setInterval(() => {
         if (start === false || total === 0) {
