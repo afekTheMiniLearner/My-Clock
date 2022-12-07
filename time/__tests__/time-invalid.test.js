@@ -1,5 +1,6 @@
 const Time = require('../time');
 
+//todo refactor those
 describe('invalid cases', () => {
     describe('creation invalid tests', () => {
         test.each([

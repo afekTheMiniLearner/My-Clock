@@ -60,7 +60,7 @@ describe('valid cases', () => {
             [-30, -30], // '-30:00:00'
             [-120, -99], // '-99:59:59'
         ])(
-            'initial time:"10:10:10" changed by set method with:%s hours, returns:%s hours with get method',
+            'initial time:"00:00:00" changed by set method with:%s hours, returns:%s hours with get method',
             (setHours, getHours) => {
                 time.hours = setHours;
                 expect(time.hours).toBe(getHours);
@@ -74,7 +74,7 @@ describe('valid cases', () => {
             [-1, -1], // '-00:01:00'
             [-50, -50], // '-00:50:00'
         ])(
-            'initial time:"10:10:10" changed by set method with:%s minutes, returns:%s minutes with get method',
+            'initial time:"00:00:00" changed by set method with:%s minutes, returns:%s minutes with get method',
             (setMinutes, getMinutes) => {
                 time.minutes = setMinutes;
                 expect(time.minutes).toBe(getMinutes);
@@ -88,7 +88,7 @@ describe('valid cases', () => {
             [-10, -10], // '-00:00:10'
             [-70, -10], // '-00:01:10'
         ])(
-            'initial time:"10:10:10" changed by set method with:%s seconds, returns:%s seconds with get method',
+            'initial time:"00:00:00" changed by set method with:%s seconds, returns:%s seconds with get method',
             (setSeconds, getSeconds) => {
                 time.seconds = setSeconds;
                 expect(time.seconds).toBe(getSeconds);
@@ -97,470 +97,206 @@ describe('valid cases', () => {
     });
 
     describe('add/sub methods tests', () => {
-        test.each([
-            [['05', '05', '05'], 10, ['15', '05', '05']],
-            [['-10', '00', '00'], 5, ['-05', '00', '00']],
-            [['10', '10', '10'], 0, ['10', '10', '10']],
-            /* ask hadriel if i should add
-                here option to add by negative number */
-        ])(
-            'addHours method for time: %s, accepts number:%s and returns time: %s',
-            (timeParams, num, res) => {
-                const time1 = new Time({
-                    seconds: +timeParams[2],
-                    minutes: +timeParams[1],
-                    hours: +timeParams[0],
-                });
-                time1.addHours(num);
+        let time;
 
-                const arr = time1.toString().split(':');
-                expect(arr).toEqual(res);
+        beforeEach(() => {
+            time = new Time({ seconds: 0, minutes: 30, hours: 15 });
+            //'15:30:00'
+        });
+
+        test.each([
+            [130, '99:59:59'],
+            [5, '20:30:00'],
+            [0, '15:30:00'],
+            [-5, '10:30:00'],
+            [-130, '-99:59:59'],
+        ])(
+            'initial time:"15:30:00" changed by addHours method of:%s hours, the result is:%s',
+            (hours, result) => {
+                time.addHours(hours);
+                expect(time.toString()).toBe(result);
             }
         );
 
         test.each([
-            [['01', '00', '30'], 50, ['01', '50', '30']],
-            [['00', '-15', '00'], 5, ['-00', '10', '00']],
-            [['00', '10', '00'], 0, ['00', '10', '00']],
-            /* ask hadriel if i should add
-                here option to add by negative number */
+            [10000, '99:59:59'],
+            [20, '15:50:00'],
+            [0, '15:30:00'],
+            [-30, '15:00:00'],
+            [-10000, '-99:59:59'],
         ])(
-            'addMinutes method for time: %s, accepts number:%s and returns time: %s',
-            (timeParams, num, res) => {
-                const time1 = new Time({
-                    seconds: +timeParams[2],
-                    minutes: +timeParams[1],
-                    hours: +timeParams[0],
-                });
-                time1.addMinutes(num);
-
-                const arr = time1.toString().split(':');
-                expect(arr).toEqual(res);
+            'initial time:"15:30:00" changed by addMinutes method of:%s minutes, the result is:%s',
+            (minutes, result) => {
+                time.addMinutes(minutes);
+                expect(time.toString()).toBe(result);
             }
         );
 
         test.each([
-            [['02', '05', '00'], 20, ['02', '05', '20']],
-            [['-15', '00', '-30'], 30, ['-15', '00', '00']],
-            [['10', '00', '10'], 0, ['10', '00', '10']],
-            /* ask hadriel if i should add
-                here option to add by negative number */
+            [380000, '99:59:59'],
+            [40, '15:30:40'],
+            [0, '15:30:00'],
+            [-30, '15:29:30'],
+            [-480000, '-99:59:59'],
         ])(
-            'addSeconds method for time: %s, accepts number: %s and returns time: %s',
-            (timeParams, num, res) => {
-                const time1 = new Time({
-                    seconds: +timeParams[2],
-                    minutes: +timeParams[1],
-                    hours: +timeParams[0],
-                });
-
-                time1.addSeconds(num);
-
-                const arr = time1.toString().split(':');
-                expect(arr).toEqual(res);
+            'initial time:"15:30:00" changed by addSeconds method of:%s seconds, the result is:%s',
+            (seconds, result) => {
+                time.addSeconds(seconds);
+                expect(time.toString()).toBe(result);
             }
         );
 
         test.each([
-            [['27', '00', '00'], 2, ['25', '00', '00']],
-            [['3', '30', '50'], 5, ['00', '00', '00']],
-            [['50', '00', '00'], 0, ['50', '00', '00']],
-            [['15', '00', '00'], 10, ['05', '00', '00']],
-            [['13', '00', '00'], 6, ['07', '00', '00']],
-            [['00', '30', '00'], 1, ['00', '00', '00']],
-            /* ask hadriel if i should add
-                here option to add by negative number */
+            [-130, '99:59:59'],
+            [-5, '20:30:00'],
+            [0, '15:30:00'],
+            [5, '10:30:00'],
+            [130, '-99:59:59'],
         ])(
-            'subHours method created with %s time, accepts number:%s and returns time: %s',
-            (timeParams, num, res) => {
-                const time1 = new Time({
-                    seconds: +timeParams[2],
-                    minutes: +timeParams[1],
-                    hours: +timeParams[0],
-                });
-                time1.subHours(num);
-
-                const arr = time1.toString().split(':');
-                expect(arr).toEqual(res);
+            'initial time:"15:30:00" changed by subHours method of:%s hours, the result is:%s',
+            (hours, result) => {
+                time.subHours(hours);
+                expect(time.toString()).toBe(result);
             }
         );
 
         test.each([
-            //add negatives
-            [['02', '00', '00'], 30, ['01', '30', '00']],
-            [['03', '30', '50'], 30, ['03', '00', '50']],
-            [['04', '00', '00'], 0, ['04', '00', '00']],
-            [['15', '60', '00'], 70, ['14', '50', '00']],
-            [['1', '30', '57'], 1000, ['00', '00', '00']],
-            [['00', '05', '120'], 6, ['00', '01', '00']],
-            [['00', '05', '100'], 6, ['00', '00', '40']],
+            [-10000, '99:59:59'],
+            [-20, '15:50:00'],
+            [0, '15:30:00'],
+            [30, '15:00:00'],
+            [10000, '-99:59:59'],
         ])(
-            'subMinutes method created with %s time, accepts number:%s and returns time: %s',
-            (initial, num, res) => {
-                const time1 = new Time({
-                    seconds: +initial[2],
-                    minutes: +initial[1],
-                    hours: +initial[0],
-                });
-                time1.subMinutes(num);
-
-                const arr = time1.toString().split(':');
-                expect(arr).toEqual(res);
+            'initial time:"15:30:00" changed by subMinutes method of:%s minutes, the result is:%s',
+            (minutes, result) => {
+                time.subMinutes(minutes);
+                expect(time.toString()).toBe(result);
             }
         );
 
         test.each([
-            //add negatives
-            [['22', '43', '40'], 96500, ['00', '00', '00']],
-            [['22', '43', '40'], 81000, ['00', '13', '40']],
-            [['10', '26', '60'], 16000, ['06', '00', '20']],
-            [['22', '00', '20'], 5420, ['20', '30', '00']],
-            [['01', '60', '40'], 4010, ['00', '53', '50']],
-            [['01', '30', '57'], 1000, ['01', '14', '17']],
-            [['20', '05', '100'], 50, ['20', '05', '50']],
-            [['00', '05', '100'], 10, ['00', '06', '30']],
+            [-380000, '99:59:59'],
+            [-40, '15:30:40'],
+            [0, '15:30:00'],
+            [30, '15:29:30'],
+            [480000, '-99:59:59'],
         ])(
-            'subSeconds method created with %s hours, accepts number:%s and returns time: %s',
-            (initial, num, res) => {
-                const time1 = new Time({
-                    seconds: +initial[2],
-                    minutes: +initial[1],
-                    hours: +initial[0],
-                });
-                time1.subSeconds(num);
-
-                const arr = time1.toString().split(':');
-                expect(arr).toEqual(res);
+            'initial time:"15:30:00" changed by subSeconds method of:%s seconds, the result is:%s',
+            (seconds, result) => {
+                time.subSeconds(seconds);
+                expect(time.toString()).toBe(result);
             }
         );
 
         test.each([
-            //add negatives
-            [
-                ['01', '30', '30'],
-                ['01', '20', '20'],
-                ['02', '50', '50'],
-            ],
-            [
-                ['02', '30', '30'],
-                ['19', '20', '31'],
-                ['21', '51', '01'],
-            ],
-            [
-                ['10', '01', '20'],
-                ['23', '23', '20'],
-                ['33', '24', '40'],
-            ],
-            [
-                ['00', '00', '00'],
-                ['00', '00', '00'],
-                ['00', '00', '00'],
-            ],
-            [
-                ['01', '30', '30'],
-                ['00', '00', '00'],
-                ['01', '30', '30'],
-            ],
-            [
-                ['00', '00', '00'],
-                ['21', '20', '20'],
-                ['21', '20', '20'],
-            ],
-            [
-                ['14', '05', '10'],
-                ['04', '60', '15'],
-                ['19', '05', '25'],
-            ],
+            [{ seconds: 0, minutes: 0, hours: 0 }, '15:30:00'],
+            [{ seconds: 30, minutes: 20, hours: 1 }, '16:50:30'],
+            [{ seconds: 0, minutes: 0, hours: 100 }, '99:59:59'],
+            [{ seconds: 0, minutes: -30, hours: -1 }, '14:00:00'],
+            [{ seconds: 0, minutes: -30, hours: -15 }, '00:00:00'],
         ])(
-            'addTime method accepts time: %s and add it to time: %s, result: %s',
-            (arr1, arr2, res) => {
-                const time1 = new Time({
-                    seconds: +arr1[2],
-                    minutes: +arr1[1],
-                    hours: +arr1[0],
-                });
-
-                const time2 = new Time({
-                    seconds: +arr2[2],
-                    minutes: +arr2[1],
-                    hours: +arr2[0],
-                });
-
-                time1.addTime(time2);
-
-                const response = time1.toString().split(':');
-                expect(response).toEqual(res);
+            'time created with:%s added to initial time:"15:30:00", then results:%s',
+            (params, result) => {
+                const time2 = new Time(params);
+                time.addTime(time2);
+                expect(time.toString()).toEqual(result);
             }
         );
 
         test.each([
-            //add negatives
-            [
-                ['02', '50', '50'],
-                ['01', '30', '30'],
-                ['01', '20', '20'],
-            ],
-            [
-                ['21', '51', '01'],
-                ['02', '30', '30'],
-                ['19', '20', '31'],
-            ],
-            [
-                ['00', '00', '00'],
-                ['10', '01', '20'],
-                ['00', '00', '00'],
-            ],
-            [
-                ['10', '10', '50'],
-                ['02', '50', '30'],
-                ['07', '20', '20'],
-            ],
-            [
-                ['02', '30', '30'],
-                ['01', '30', '30'],
-                ['01', '00', '00'],
-            ],
-            [
-                ['21', '20', '20'],
-                ['21', '20', '20'],
-                ['00', '00', '00'],
-            ],
-            [
-                ['19', '05', '25'],
-                ['00', '00', '00'],
-                ['19', '05', '25'],
-            ],
+            [{ seconds: 0, minutes: 30, hours: 1 }, '14:00:00'],
+            [{ seconds: 0, minutes: 30, hours: 15 }, '00:00:00'],
+            [{ seconds: 0, minutes: 0, hours: 0 }, '15:30:00'],
+            [{ seconds: -30, minutes: -20, hours: -1 }, '16:50:30'],
+            [{ seconds: 0, minutes: 0, hours: -100 }, '99:59:59'],
         ])(
-            'subTime method accepts time: %s and sub from it time: %s, result: %s',
-            (arr1, arr2, res) => {
-                const time1 = new Time({
-                    seconds: +arr1[2],
-                    minutes: +arr1[1],
-                    hours: +arr1[0],
-                });
-
-                const time2 = new Time({
-                    seconds: +arr2[2],
-                    minutes: +arr2[1],
-                    hours: +arr2[0],
-                });
-
-                time1.subTime(time2);
-
-                const response = time1.toString().split(':');
-                expect(response).toEqual(res);
+            'time created with:%s subbed from initial time:"15:30:00", then results:%s',
+            (params, result) => {
+                const time2 = new Time(params);
+                time.subTime(time2);
+                expect(time.toString()).toEqual(result);
             }
         );
 
-        describe('reset methods tests', () => {
+        describe('reset & toString methods tests', () => {
+            let time1;
+            let time2;
+
+            beforeEach(() => {
+                time1 = new Time({ seconds: 30, minutes: 25, hours: 20 });
+                //'20:25:30'
+
+                time2 = new Time({ seconds: -30, minutes: -25, hours: -20 });
+                //'-20:25:30'
+            });
+
+            test('resetHours applied on time:"20:25:30", returns time: "00:25:30"', () => {
+                time1.resetHours();
+                expect(time1.toString()).toEqual('00:25:30');
+            });
+
+            test('resetHours applied on time:"-20:25:30", returns time: "-00:25:30"', () => {
+                time2.resetHours();
+                expect(time2.toString()).toEqual('-00:25:30');
+            });
+
+            test('resetMinutes applied on time:"20:25:30", returns time: "20:00:30"', () => {
+                time1.resetMinutes();
+                expect(time1.toString()).toEqual('20:00:30');
+            });
+
+            test('resetMinutes applied on time:"-20:25:30", returns time: "-20:00:30"', () => {
+                time2.resetMinutes();
+                expect(time2.toString()).toEqual('-20:00:30');
+            });
+
+            test('resetSeconds applied on time:"20:25:30", returns time: "20:25:00"', () => {
+                time1.resetSeconds();
+                expect(time1.toString()).toEqual('20:25:00');
+            });
+
+            test('resetSeconds applied on time:"-20:25:30", returns time: "-20:25:00"', () => {
+                time2.resetSeconds();
+                expect(time2.toString()).toEqual('-20:25:00');
+            });
+
+            test('reset applied on time:"20:25:30", returns time: "00:00:00"', () => {
+                time1.reset();
+                expect(time1.toString()).toEqual('00:00:00');
+            });
+
+            test('reset applied on time:"-20:25:30", returns time: "00:00:00"', () => {
+                time2.reset();
+                expect(time2.toString()).toEqual('00:00:00');
+            });
+
             test.each([
-                //add negatives
-                [
-                    ['23', '30', '00'],
-                    ['00', '30', '00'],
-                ],
-                [
-                    ['3', '30', '50'],
-                    ['00', '30', '50'],
-                ],
-                [
-                    ['50', '11', '43'],
-                    ['00', '11', '43'],
-                ],
-                [
-                    ['6', '00', '00'],
-                    ['00', '00', '00'],
-                ],
-                [
-                    ['13', '10', '00'],
-                    ['00', '10', '00'],
-                ],
-                [
-                    ['00', '30', '00'],
-                    ['00', '30', '00'],
-                ],
-                [
-                    ['01', '01', '01'],
-                    ['00', '01', '01'],
-                ],
+                ['HHhours:MMminutes:SSseconds', '20hours:25minutes:30seconds'],
+                ['HHh:MMm:SSs', '20h:25m:30s'],
+                ['HHhrs', '20hrs'],
+                ['MMmins', '25mins'],
+                ['SSseconds', '30seconds'],
+                [undefined, '20:25:30'],
             ])(
-                'resetHours method created with %s time, returns time: %s',
-                (initial, res) => {
-                    const time1 = new Time({
-                        seconds: +initial[2],
-                        minutes: +initial[1],
-                        hours: +initial[0],
-                    });
-                    time1.resetHours();
-
-                    const arr = time1.toString().split(':');
-                    expect(arr).toEqual(res);
+                'calling toString with format:%s on time:"20:25:30" expect output:%s',
+                (format, res) => {
+                    expect(time1.toString(format)).toBe(res);
                 }
             );
 
             test.each([
-                //add negatives
-                [
-                    ['23', '30', '00'],
-                    ['23', '00', '00'],
-                ],
-                [
-                    ['03', '30', '50'],
-                    ['03', '00', '50'],
-                ],
-                [
-                    ['50', '11', '43'],
-                    ['50', '00', '43'],
-                ],
-                [
-                    ['06', '00', '00'],
-                    ['06', '00', '00'],
-                ],
-                [
-                    ['13', '10', '00'],
-                    ['13', '00', '00'],
-                ],
-                [
-                    ['00', '30', '00'],
-                    ['00', '00', '00'],
-                ],
-                [
-                    ['01', '01', '01'],
-                    ['01', '00', '01'],
-                ],
+                ['HHhours:MMminutes:SSseconds', '-20hours:25minutes:30seconds'],
+                ['HHh:MMm:SSs', '-20h:25m:30s'],
+                ['HHhrs', '-20hrs'],
+                ['MMmins', '-25mins'],
+                ['SSseconds', '-30seconds'],
+                [undefined, '-20:25:30'],
             ])(
-                'resetMinutes method created with %s time, returns time: %s',
-                (initial, res) => {
-                    const time1 = new Time({
-                        seconds: +initial[2],
-                        minutes: +initial[1],
-                        hours: +initial[0],
-                    });
-                    time1.resetMinutes();
-
-                    const arr = time1.toString().split(':');
-                    expect(arr).toEqual(res);
-                }
-            );
-
-            test.each([
-                //add negatives
-                [
-                    ['23', '30', '50'],
-                    ['23', '30', '00'],
-                ],
-                [
-                    ['03', '30', '80'],
-                    ['03', '31', '00'],
-                ],
-                [
-                    ['50', '11', '43'],
-                    ['50', '11', '00'],
-                ],
-                [
-                    ['06', '02', '39'],
-                    ['06', '02', '00'],
-                ],
-                [
-                    ['13', '10', '00'],
-                    ['13', '10', '00'],
-                ],
-                [
-                    ['01', '30', '50'],
-                    ['01', '30', '00'],
-                ],
-                [
-                    ['01', '01', '01'],
-                    ['01', '01', '00'],
-                ],
-            ])(
-                'resetSeconds method created with %s time, returns time: %s',
-                (initial, res) => {
-                    const time1 = new Time({
-                        seconds: +initial[2],
-                        minutes: +initial[1],
-                        hours: +initial[0],
-                    });
-                    time1.resetSeconds();
-
-                    const arr = time1.toString().split(':');
-                    expect(arr).toEqual(res);
-                }
-            );
-
-            test.each([
-                //add negatives
-                [
-                    ['23', '30', '50'],
-                    ['00', '00', '00'],
-                ],
-                [
-                    ['00', '00', '00'],
-                    ['00', '00', '00'],
-                ],
-                [
-                    ['03', '30', '80'],
-                    ['00', '00', '00'],
-                ],
-                [
-                    ['50', '11', '43'],
-                    ['00', '00', '00'],
-                ],
-                [
-                    ['06', '02', '39'],
-                    ['00', '00', '00'],
-                ],
-                [
-                    ['13', '10', '00'],
-                    ['00', '00', '00'],
-                ],
-                [
-                    ['01', '30', '60'],
-                    ['00', '00', '00'],
-                ],
-                [
-                    ['01', '01', '01'],
-                    ['00', '00', '00'],
-                ],
-            ])(
-                'reset method created with %s time, returns time: %s',
-                (initial, res) => {
-                    const time1 = new Time({
-                        seconds: +initial[2],
-                        minutes: +initial[1],
-                        hours: +initial[0],
-                    });
-                    time1.reset();
-
-                    const arr = time1.toString().split(':');
-                    expect(arr).toEqual(res);
+                'calling toString with format:%s on time:"-20:25:30" expect output:%s',
+                (format, res) => {
+                    expect(time2.toString(format)).toBe(res);
                 }
             );
         });
-    });
-
-    describe('toString method tests', () => {
-        test.each([
-            //add negatives
-            ['HH:MM:SS', '10:15:30'],
-            ['HHhours:MMminutes:SSseconds', '10hours:15minutes:30seconds'],
-            ['HHh:MMm:SSs', '10h:15m:30s'],
-            ['HHhrs:MMmin:SSsec', '10hrs:15min:30sec'],
-            ['HHhrs', '10hrs'],
-            ['MMmins', '15mins'],
-            ['SSseconds', '30seconds'],
-            [undefined, '10:15:30'],
-        ])(
-            'The format option provided is: %s expected output: %s',
-            (format, res) => {
-                const time1 = new Time({
-                    seconds: 30,
-                    minutes: 15,
-                    hours: 10,
-                });
-
-                expect(time1.toString(format)).toBe(res);
-            }
-        );
     });
 });
