@@ -1,7 +1,4 @@
-const validateParam = (module.exports.validateParam = function (
-    param,
-    allowedNull = true
-) {
+module.exports.validateParam = function (param, allowedNull = true) {
     if (param === null)
         if (allowedNull) return;
         else throw Error('Time element must be a valid number');
@@ -11,4 +8,4 @@ const validateParam = (module.exports.validateParam = function (
     if (isInvalid) {
         throw Error('Time element must be a valid number');
     }
-});
+};

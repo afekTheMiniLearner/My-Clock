@@ -2,19 +2,16 @@ const {
     convertSecondsToHoursUnit,
     convertSecondsToMinutesUnit,
     convertSecondsToSecondsUnit,
-    timeParamsToTotalSeconds,
+    timeUnitsToTotalSeconds,
     currentTimeToTotalSeconds,
     hoursToTotalSeconds,
     minutesToTotalSeconds,
 } = require('./utils/calculators');
 const { validateParam } = require('./utils/validators');
+const { maxSeconds, minSeconds } = require('./utils/consts');
 
 class Time {
     #seconds;
-
-    // todo: add to consts file and use it here
-    static maxSeconds = 359999; // +99:59:59
-    static minSeconds = -359999; // -99:59:59
 
     constructor({ seconds = null, minutes = null, hours = null } = {}) {
         validateParam(seconds);
@@ -26,16 +23,16 @@ class Time {
 
         this.#seconds = shouldSetToCurrentTime
             ? currentTimeToTotalSeconds()
-            : timeParamsToTotalSeconds({ seconds, minutes, hours });
+            : timeUnitsToTotalSeconds({ seconds, minutes, hours });
 
         this.validateLimiter();
     }
 
     validateLimiter() {
-        if (this.#seconds > Time.maxSeconds) {
-            this.#seconds = Time.maxSeconds;
-        } else if (this.#seconds < Time.minSeconds) {
-            this.#seconds = Time.minSeconds;
+        if (this.#seconds > maxSeconds) {
+            this.#seconds = maxSeconds;
+        } else if (this.#seconds < minSeconds) {
+            this.#seconds = minSeconds;
         }
     }
 
@@ -68,11 +65,8 @@ class Time {
         this.validateLimiter();
     }
 
-    // todo: same as set hours logic
     set minutes(minutes) {
         validateParam(minutes, false);
-
-        sign = minutes < 0 ? -1 : 1;
 
         const temp = new Time({
             hours: this.hours,
@@ -80,23 +74,20 @@ class Time {
             secnods: this.secnods,
         });
 
-        this.#seconds += temp.totalSeconds * sign;
+        this.#seconds = temp.totalSeconds;
         this.validateLimiter();
     }
 
-    // todo: same as set hours logic
     set seconds(seconds) {
         validateParam(seconds, false);
-
-        sign = seconds < 0 ? -1 : 1;
 
         const temp = new Time({
             hours: this.hours,
             minutes: this.minutes,
-            secnods: seconds,
+            secnods: secnods,
         });
 
-        this.#seconds += temp.totalSeconds * sign;
+        this.#seconds = temp.totalSeconds;
         this.validateLimiter();
     }
 
@@ -146,14 +137,24 @@ class Time {
         this.#seconds = temp.totalSeconds;
     }
 
-    // todo: same as resetHours logic
     resetMinutes() {
-        this.#seconds -= this.minutes * 60;
+        const temp = new Time({
+            hours: this.hours,
+            minutes: 0,
+            secnods: this.seconds,
+        });
+
+        this.#seconds = temp.totalSeconds;
     }
 
-    // todo: same as resetHours logic
     resetSeconds() {
-        this.#seconds -= this.seconds;
+        const temp = new Time({
+            hours: this.hours,
+            minutes: this.minutes,
+            secnods: 0,
+        });
+
+        this.#seconds = temp.totalSeconds;
     }
 
     reset() {
@@ -176,11 +177,6 @@ class Time {
 
         this.#seconds -= time2.totalSeconds;
         this.validateLimiter();
-    }
-
-    // todo: check to remove this method
-    setTotalSeconds(seconds) {
-        this.#seconds = seconds;
     }
 
     toString(format = 'HH:MM:SS') {
