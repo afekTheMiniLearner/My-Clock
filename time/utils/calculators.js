@@ -7,7 +7,7 @@ module.exports.convertSecondsToMinutesUnit = function (sec) {
 };
 
 module.exports.convertSecondsToSecondsUnit = function (sec) {
-    return ~~(sec % 60); // todo: check this logic
+    return ~~(sec % 60); 
 };
 
 const timeUnitsToTotalSeconds = (module.exports.timeUnitsToTotalSeconds =
