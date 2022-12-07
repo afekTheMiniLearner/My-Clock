@@ -58,7 +58,7 @@ class Time {
         const temp = new Time({
             hours: hours,
             minutes: this.minutes,
-            secnods: this.secnods,
+            seconds: this.seconds,
         });
 
         this.#seconds = temp.totalSeconds;
@@ -71,7 +71,7 @@ class Time {
         const temp = new Time({
             hours: this.hours,
             minutes: minutes,
-            secnods: this.secnods,
+            seconds: this.seconds,
         });
 
         this.#seconds = temp.totalSeconds;
@@ -84,7 +84,7 @@ class Time {
         const temp = new Time({
             hours: this.hours,
             minutes: this.minutes,
-            secnods: secnods,
+            seconds: seconds,
         });
 
         this.#seconds = temp.totalSeconds;
@@ -131,7 +131,7 @@ class Time {
         const temp = new Time({
             hours: 0,
             minutes: this.minutes,
-            secnods: this.seconds,
+            seconds: this.seconds,
         });
 
         this.#seconds = temp.totalSeconds;
@@ -141,7 +141,7 @@ class Time {
         const temp = new Time({
             hours: this.hours,
             minutes: 0,
-            secnods: this.seconds,
+            seconds: this.seconds,
         });
 
         this.#seconds = temp.totalSeconds;
@@ -151,7 +151,7 @@ class Time {
         const temp = new Time({
             hours: this.hours,
             minutes: this.minutes,
-            secnods: 0,
+            seconds: 0,
         });
 
         this.#seconds = temp.totalSeconds;
@@ -185,11 +185,10 @@ class Time {
                 'Format options must contain one of the following: HH/MM/SS'
             );
         }
-
         const sign = this.#seconds >= 0;
 
         return (
-            (sign ? '+' : '-') +
+            (sign ? '' : '-') +
             format
                 .replace('MM', `${Math.abs(this.minutes)}`.padStart(2, '0'))
                 .replace('SS', `${Math.abs(this.seconds)}`.padStart(2, '0'))

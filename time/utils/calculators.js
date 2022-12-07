@@ -7,10 +7,10 @@ module.exports.convertSecondsToMinutesUnit = function (sec) {
 };
 
 module.exports.convertSecondsToSecondsUnit = function (sec) {
-    return ~~((sec % 60) % 60); // todo: check this logic
+    return ~~(sec % 60); // todo: check this logic
 };
 
-const timeUnitsToTotalSeconds = (module.exports.timeParamsToTotalSeconds =
+const timeUnitsToTotalSeconds = (module.exports.timeUnitsToTotalSeconds =
     function ({ seconds, minutes, hours } = {}) {
         seconds = seconds ?? 0;
         minutes = minutes ?? 0;
