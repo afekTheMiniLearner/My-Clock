@@ -65,6 +65,17 @@ describe('valid cases', () => {
 
         expect(time.toString()).toBe(currentTime);
     });
+
+    test("creating time with null params return's current time", () => {
+        const time = new Time({ seconds: null, minutes: null, hours: null });
+        const currentTime = new Date().toLocaleString('en-GB', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+        });
+
+        expect(time.toString()).toBe(currentTime);
+    });
 });
 
 describe('get & set methods tests', () => {

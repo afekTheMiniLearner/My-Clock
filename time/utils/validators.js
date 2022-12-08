@@ -1,11 +1,7 @@
 module.exports.validateParam = function (param, allowedNull = false) {
-    if (param === null)
-        if (allowedNull) return;
-        else throw Error('Time element must be a valid number');
+    if (param === null && allowedNull) return;
 
-    const isInvalid = typeof param !== 'number' && !Number.isNaN(seconds);
-
-    if (isInvalid) {
+    if (typeof param !== 'number') {
         throw Error('Time element must be a valid number');
     }
 };
