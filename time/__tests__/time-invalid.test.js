@@ -20,7 +20,7 @@ describe('invalid cases', () => {
     });
 
     test.each([
-        [], // check if necessary
+        [undefined],
         ['abc'],
         [() => {}],
         ['10'],
@@ -44,7 +44,7 @@ describe('invalid cases', () => {
         [{}],
         [{ 5: 5 }],
         [null],
-        [], // check if necessary
+        [undefined],
     ])('set minutes method with invalid param returns error', (param) => {
         expect(() => {
             time.minutes = param;
@@ -60,7 +60,7 @@ describe('invalid cases', () => {
         [{}],
         [{ 5: 5 }],
         [null],
-        [], // check if necessary
+        [undefined],
     ])('set seconds method with invalid param returns error', (param) => {
         expect(() => {
             time.seconds = param;
