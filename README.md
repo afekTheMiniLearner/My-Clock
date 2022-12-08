@@ -14,7 +14,7 @@
 -   [x] **Inheritance** : the inheritance from **Time** class to another classes such as: **clock**, **stopper** allowed me to preserve the initial time logic in my project and help the other classes to be written with less code, and easier maintenance if needed.
 -   [x] **Test-writing** : as you can see there are tests that cover any function and method that have been written inside this project, in order to make sure all of the classes and util function's all works well, and to provide full coverage : <br />
 
-<img src="./readme-resources/coverage.png" width=100% height=100% align="right">
+<img src="./readme-resources/coverage.png" width=800px height=120px align="right">
 
 <br />
 
