@@ -42,19 +42,29 @@ describe('valid cases', () => {
         );
     });
 
-    //add current time check
     test.each([
         [{ seconds: 0, minutes: 0, hours: 0 }, '00:00:00'],
         [{ seconds: 10, minutes: 30, hours: 1 }, '01:30:10'],
         [{ seconds: 0, minutes: 10, hours: 3 }, '03:10:00'],
         [{ seconds: 50, minutes: 50, hours: 50 }, '50:50:50'],
     ])(
-        'creating time with %s seconds should returns time: %s',
+        'creating time with:%s units should returns time: %s',
         (params, result) => {
             const time = new Time(params);
             expect(time.toString()).toBe(result);
         }
     );
+
+    test("creating time without params return's current time", () => {
+        const time = new Time();
+        const currentTime = new Date().toLocaleString('en-GB', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+        });
+
+        expect(time.toString()).toBe(currentTime);
+    });
 });
 
 describe('get & set methods tests', () => {
