@@ -14,9 +14,9 @@ class Time {
     #seconds;
 
     constructor({ seconds = null, minutes = null, hours = null } = {}) {
-        validateParam(seconds);
-        validateParam(minutes);
-        validateParam(hours);
+        validateParam(seconds, true);
+        validateParam(minutes, true);
+        validateParam(hours, true);
 
         const shouldSetToCurrentTime =
             seconds === null && minutes === null && hours === null;
@@ -53,7 +53,7 @@ class Time {
     }
 
     set hours(hours) {
-        validateParam(hours, false);
+        validateParam(hours);
 
         const temp = new Time({
             hours: hours,
@@ -66,7 +66,7 @@ class Time {
     }
 
     set minutes(minutes) {
-        validateParam(minutes, false);
+        validateParam(minutes);
 
         const temp = new Time({
             hours: this.hours,
@@ -79,7 +79,7 @@ class Time {
     }
 
     set seconds(seconds) {
-        validateParam(seconds, false);
+        validateParam(seconds);
 
         const temp = new Time({
             hours: this.hours,
@@ -92,37 +92,37 @@ class Time {
     }
 
     addHours(hours) {
-        validateParam(hours, false);
+        validateParam(hours);
         this.#seconds += hoursToTotalSeconds(hours);
         this.validateLimiter();
     }
 
     addMinutes(minutes) {
-        validateParam(minutes, false);
+        validateParam(minutes);
         this.#seconds += minutesToTotalSeconds(minutes);
         this.validateLimiter();
     }
 
     addSeconds(seconds) {
-        validateParam(seconds, false);
+        validateParam(seconds);
         this.#seconds += seconds;
         this.validateLimiter();
     }
 
     subHours(hours) {
-        validateParam(hours, false);
+        validateParam(hours);
         this.#seconds -= hoursToTotalSeconds(hours);
         this.validateLimiter();
     }
 
     subMinutes(minutes) {
-        validateParam(minutes, false);
+        validateParam(minutes);
         this.#seconds -= minutesToTotalSeconds(minutes);
         this.validateLimiter();
     }
 
     subSeconds(seconds) {
-        validateParam(seconds, false);
+        validateParam(seconds);
         this.#seconds -= seconds;
         this.validateLimiter();
     }
