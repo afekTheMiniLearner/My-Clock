@@ -4,7 +4,7 @@
 
 ### This repository created about a task of creating a **time** class and extend it to another classes such as **clock** and **stopper** <br />
 
-<img src="./readme-resources/stopper.png" width=100px height=100px align="right">
+<img src="./readme-resources/hourglass.png" width=100px height=100px align="right">
 
 ---
 
