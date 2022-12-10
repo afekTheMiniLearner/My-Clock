@@ -25,3 +25,10 @@
 -   This project & tests were written with **high strictness**, and they passed my mentor's high standarts after me **refactoring this project's logic and tests a few times in order to make it easy to read and maintain** as much as possible.
 
 #### **im still working on this project which hasn't finished yet, but you can see that part 1 of the task is complete**
+
+## Author
+
+:octocat: **Afek Sakaju**
+
+-   LinkedIn: [@afeksa](https://www.linkedin.com/in/afeksa/)
+-   GitHub: [@afekTheMiniLearner](https://github.com/afekTheMiniLearner)
