@@ -86,18 +86,18 @@ describe('Time class tests', () => {
             let time;
 
             beforeEach(() => {
-                time = new Time({ seconds: 0, minutes: 0, hours: 0 });
-                //'00:00:00'
+                time = new Time({ seconds: 30, minutes: 10, hours: 5 });
+                // '05:10:30'
             });
 
             test.each([
                 [120, 99], // '99:59:59'
-                [1, 1], // '01:00:00'
-                [0, 0], // '00:00:00'
-                [-30, -30], // '-30:00:00'
-                [-120, -99], // '-99:59:59'
+                [1, 1], // '01:10:30'
+                [0, 0], // '00:10:30'
+                [-30, -29], // '-29:49:30' - because initial time was positive
+                [-120, -99], // '-99:59:59' - because initial time was positive
             ])(
-                'initial time:"00:00:00" changed by set method with:%s hours, returns:%s hours with get method',
+                'initial time:"05:10:30" changed by set method with:%s hours, returns:%s hours with get method',
                 (setHours, getHours) => {
                     time.hours = setHours;
                     expect(time.hours).toBe(getHours);
@@ -105,13 +105,13 @@ describe('Time class tests', () => {
             );
 
             test.each([
-                [70, 10], // '00:50:00'
-                [1, 1], // '00:01:00'
-                [0, 0], // '00:00:00'
-                [-1, -1], // '-00:01:00'
-                [-50, -50], // '-00:50:00'
+                [70, 10], // '06:10:30'
+                [1, 1], // '05:01:30'
+                [0, 0], // '05:00:30'
+                [-1, 59], // '04:59:30' - because initial time was positive
+                [-50, 10], // '04:10:30' - because initial time was positive
             ])(
-                'initial time:"00:00:00" changed by set method with:%s minutes, returns:%s minutes with get method',
+                'initial time:"05:10:30" changed by set method with:%s minutes, returns:%s minutes with get method',
                 (setMinutes, getMinutes) => {
                     time.minutes = setMinutes;
                     expect(time.minutes).toBe(getMinutes);
@@ -119,13 +119,13 @@ describe('Time class tests', () => {
             );
 
             test.each([
-                [70, 10], // '00:01:10'
-                [10, 10], // '00:00:10'
-                [0, 0], // '00:00:00'
-                [-10, -10], // '-00:00:10'
-                [-70, -10], // '-00:01:10'
+                [70, 10], // '05:11:10'
+                [10, 10], // '05:10:10'
+                [0, 0], // '05:10:00'
+                [-10, 50], // '04:50:30'
+                [-70, 50], // '03:50:30'
             ])(
-                'initial time:"00:00:00" changed by set method with:%s seconds, returns:%s seconds with get method',
+                'initial time:"05:10:30" changed by set method with:%s seconds, returns:%s seconds with get method',
                 (setSeconds, getSeconds) => {
                     time.seconds = setSeconds;
                     expect(time.seconds).toBe(getSeconds);
@@ -138,7 +138,7 @@ describe('Time class tests', () => {
 
             beforeEach(() => {
                 time = new Time({ seconds: 0, minutes: 30, hours: 15 });
-                //'15:30:00'
+                // '15:30:00'
             });
 
             test.each([
@@ -367,41 +367,17 @@ describe('Time class tests', () => {
             [{}],
             [{ 5: 5 }],
             [null],
-        ])('set hours method with invalid param returns error', (param) => {
+        ])('set method with invalid param returns error', (param) => {
             expect(() => {
                 time.hours = param;
             }).toThrow(Error('Time element must be a valid number'));
-        });
 
-        test.each([
-            ['abc'],
-            [() => {}],
-            ['10'],
-            [[]],
-            [[5]],
-            [{}],
-            [{ 5: 5 }],
-            [null],
-            [undefined],
-        ])('set minutes method with invalid param returns error', (param) => {
-            expect(() => {
-                time.minutes = param;
-            }).toThrow(Error('Time element must be a valid number'));
-        });
-
-        test.each([
-            ['abc'],
-            [() => {}],
-            ['10'],
-            [[]],
-            [[5]],
-            [{}],
-            [{ 5: 5 }],
-            [null],
-            [undefined],
-        ])('set seconds method with invalid param returns error', (param) => {
             expect(() => {
                 time.seconds = param;
+            }).toThrow(Error('Time element must be a valid number'));
+
+            expect(() => {
+                time.minutes = param;
             }).toThrow(Error('Time element must be a valid number'));
         });
     });
