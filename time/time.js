@@ -8,7 +8,7 @@ const {
     minutesToTotalSeconds,
 } = require('./utils/calculators');
 const { validateNumber } = require('./utils/validators');
-const { maxSeconds, minSeconds } = require('./utils/consts');
+const { MAX_TIME_SECONDS, MIN_TIME_SECONDS } = require('./utils/consts');
 
 class Time {
     #seconds;
@@ -29,27 +29,15 @@ class Time {
     }
 
     validateLimiter() {
-        if (this.#seconds > maxSeconds) {
-            this.#seconds = maxSeconds;
-        } else if (this.#seconds < minSeconds) {
-            this.#seconds = minSeconds;
+        if (this.#seconds > MAX_TIME_SECONDS) {
+            this.#seconds = MAX_TIME_SECONDS;
+        } else if (this.#seconds < MIN_TIME_SECONDS) {
+            this.#seconds = MIN_TIME_SECONDS;
         }
     }
 
     get hours() {
         return convertSecondsToHoursUnit(this.#seconds);
-    }
-
-    get minutes() {
-        return convertSecondsToMinutesUnit(this.#seconds);
-    }
-
-    get seconds() {
-        return convertSecondsToSecondsUnit(this.#seconds);
-    }
-
-    get totalSeconds() {
-        return this.#seconds;
     }
 
     set hours(hours) {
@@ -65,6 +53,10 @@ class Time {
         this.validateLimiter();
     }
 
+    get minutes() {
+        return convertSecondsToMinutesUnit(this.#seconds);
+    }
+
     set minutes(minutes) {
         validateNumber(minutes);
 
@@ -78,6 +70,10 @@ class Time {
         this.validateLimiter();
     }
 
+    get seconds() {
+        return convertSecondsToSecondsUnit(this.#seconds);
+    }
+
     set seconds(seconds) {
         validateNumber(seconds);
 
@@ -89,6 +85,10 @@ class Time {
 
         this.#seconds = temp.totalSeconds;
         this.validateLimiter();
+    }
+
+    get totalSeconds() {
+        return this.#seconds;
     }
 
     addHours(hours) {
@@ -128,33 +128,15 @@ class Time {
     }
 
     resetHours() {
-        const temp = new Time({
-            hours: 0,
-            minutes: this.minutes,
-            seconds: this.seconds,
-        });
-
-        this.#seconds = temp.totalSeconds;
+        this.hours = 0;
     }
 
     resetMinutes() {
-        const temp = new Time({
-            hours: this.hours,
-            minutes: 0,
-            seconds: this.seconds,
-        });
-
-        this.#seconds = temp.totalSeconds;
+        this.minutes = 0;
     }
 
     resetSeconds() {
-        const temp = new Time({
-            hours: this.hours,
-            minutes: this.minutes,
-            seconds: 0,
-        });
-
-        this.#seconds = temp.totalSeconds;
+        this.seconds = 0;
     }
 
     reset() {

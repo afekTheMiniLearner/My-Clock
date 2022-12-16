@@ -137,8 +137,7 @@ describe('Time class tests', () => {
             let time;
 
             beforeEach(() => {
-                time = new Time({ seconds: 0, minutes: 30, hours: 15 });
-                // '15:30:00'
+                time = new Time({ seconds: 0, minutes: 30, hours: 15 }); // '15:30:00'
             });
 
             test.each([
@@ -260,11 +259,8 @@ describe('Time class tests', () => {
             let time2;
 
             beforeEach(() => {
-                time1 = new Time({ seconds: 30, minutes: 25, hours: 20 });
-                //'20:25:30'
-
-                time2 = new Time({ seconds: -30, minutes: -25, hours: -20 });
-                //'-20:25:30'
+                time1 = new Time({ seconds: 30, minutes: 25, hours: 20 }); // '20:25:30'
+                time2 = new Time({ seconds: -30, minutes: -25, hours: -20 }); // '-20:25:30'
             });
 
             test('resetHours applied on time:"20:25:30", returns time: "00:25:30"', () => {
