@@ -1,7 +1,7 @@
-module.exports.validateParam = function (param, allowedNull = false) {
-    if (param === null && allowedNull) return;
+module.exports.validateNumber = function (num, allowedNull = false) {
+    if (num === null && allowedNull) return;
 
-    if (typeof param !== 'number') {
+    if (typeof num !== 'number') {
         throw Error('Time element must be a valid number');
     }
 };

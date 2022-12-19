@@ -1,14 +1,26 @@
 module.exports.convertSecondsToHoursUnit = function (sec) {
-    return ~~(sec / 60 / 60);
+    return parseInt(`${sec / 60 / 60}`);
 };
 
 module.exports.convertSecondsToMinutesUnit = function (sec) {
-    return ~~((sec / 60) % 60);
+    return parseInt(`${(sec / 60) % 60}`);
 };
 
 module.exports.convertSecondsToSecondsUnit = function (sec) {
-    return ~~(sec % 60); 
+    return parseInt(`${sec % 60}`);
 };
+
+const hoursToTotalSeconds = (module.exports.hoursToTotalSeconds = function (
+    hours
+) {
+    return hours * 3600;
+});
+
+const minutesToTotalSeconds = (module.exports.minutesToTotalSeconds = function (
+    minutes
+) {
+    return minutes * 60;
+});
 
 const timeUnitsToTotalSeconds = (module.exports.timeUnitsToTotalSeconds =
     function ({ seconds, minutes, hours } = {}) {
@@ -32,15 +44,3 @@ module.exports.currentTimeToTotalSeconds = function () {
         seconds: now.getSeconds(),
     });
 };
-
-const hoursToTotalSeconds = (module.exports.hoursToTotalSeconds = function (
-    hours
-) {
-    return hours * 3600;
-});
-
-const minutesToTotalSeconds = (module.exports.minutesToTotalSeconds = function (
-    minutes
-) {
-    return minutes * 60;
-});
