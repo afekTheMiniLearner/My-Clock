@@ -43,13 +43,12 @@ class Time {
     set hours(hours) {
         validateNumber(hours);
 
-        const temp = new Time({
+        this.#seconds = timeUnitsToTotalSeconds({
             hours: hours,
             minutes: this.minutes,
             seconds: this.seconds,
         });
 
-        this.#seconds = temp.totalSeconds;
         this.validateLimiter();
     }
 
@@ -60,13 +59,12 @@ class Time {
     set minutes(minutes) {
         validateNumber(minutes);
 
-        const temp = new Time({
-            hours: this.hours,
-            minutes: minutes,
+        this.#seconds = timeUnitsToTotalSeconds({
             seconds: this.seconds,
+            minutes,
+            hours: this.hours,
         });
 
-        this.#seconds = temp.totalSeconds;
         this.validateLimiter();
     }
 
@@ -77,13 +75,12 @@ class Time {
     set seconds(seconds) {
         validateNumber(seconds);
 
-        const temp = new Time({
+        this.#seconds = timeUnitsToTotalSeconds({
             hours: this.hours,
             minutes: this.minutes,
             seconds: seconds,
         });
 
-        this.#seconds = temp.totalSeconds;
         this.validateLimiter();
     }
 
