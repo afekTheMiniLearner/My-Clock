@@ -35,11 +35,6 @@ class Clock extends Time {
     pause() {
         clearInterval(this.interval);
     }
-
-    say() {
-        console.log(this.tSeconds);
-        console.log(this.toString());
-    }
 }
 
 module.exports = Clock;
