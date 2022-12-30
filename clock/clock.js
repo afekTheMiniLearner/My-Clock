@@ -27,13 +27,18 @@ class Clock extends Time {
         if (this.interval) return;
 
         this.interval = setInterval(() => {
-            if (this.totalSeconds === MAX_CLOCK_SECONDS) this.pause();
+            if (this.tSeconds === MAX_CLOCK_SECONDS) this.pause();
             else this.addSeconds(1);
         }, 1000);
     }
 
     pause() {
         clearInterval(this.interval);
+    }
+
+    say() {
+        console.log(this.tSeconds);
+        console.log(this.toString());
     }
 }
 
