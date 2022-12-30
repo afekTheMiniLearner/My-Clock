@@ -36,3 +36,5 @@ class Clock extends Time {
         clearInterval(this.interval);
     }
 }
+
+module.exports = Clock;
