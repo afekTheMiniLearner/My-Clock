@@ -11,8 +11,6 @@ const { validateNumber } = require('./utils/validators');
 const { MAX_TIME_SECONDS, MIN_TIME_SECONDS } = require('./utils/consts');
 
 class Time {
-    #seconds;
-
     constructor({ seconds = null, minutes = null, hours = null } = {}) {
         validateNumber(seconds, true);
         validateNumber(minutes, true);
@@ -21,7 +19,7 @@ class Time {
         const shouldSetToCurrentTime =
             seconds === null && minutes === null && hours === null;
 
-        this.#seconds = shouldSetToCurrentTime
+        this.tSeconds = shouldSetToCurrentTime // tSeconds refers to = totalSeconds
             ? currentTimeToTotalSeconds()
             : timeUnitsToTotalSeconds({ seconds, minutes, hours });
 
@@ -29,21 +27,21 @@ class Time {
     }
 
     validateLimiter() {
-        if (this.#seconds > MAX_TIME_SECONDS) {
-            this.#seconds = MAX_TIME_SECONDS;
-        } else if (this.#seconds < MIN_TIME_SECONDS) {
-            this.#seconds = MIN_TIME_SECONDS;
+        if (this.tSeconds > MAX_TIME_SECONDS) {
+            this.tSeconds = MAX_TIME_SECONDS;
+        } else if (this.tSeconds < MIN_TIME_SECONDS) {
+            this.tSeconds = MIN_TIME_SECONDS;
         }
     }
 
     get hours() {
-        return convertSecondsToHoursUnit(this.#seconds);
+        return convertSecondsToHoursUnit(this.tSeconds);
     }
 
     set hours(hours) {
         validateNumber(hours);
 
-        this.#seconds = timeUnitsToTotalSeconds({
+        this.tSeconds = timeUnitsToTotalSeconds({
             hours: hours,
             minutes: this.minutes,
             seconds: this.seconds,
@@ -53,13 +51,13 @@ class Time {
     }
 
     get minutes() {
-        return convertSecondsToMinutesUnit(this.#seconds);
+        return convertSecondsToMinutesUnit(this.tSeconds);
     }
 
     set minutes(minutes) {
         validateNumber(minutes);
 
-        this.#seconds = timeUnitsToTotalSeconds({
+        this.tSeconds = timeUnitsToTotalSeconds({
             seconds: this.seconds,
             minutes,
             hours: this.hours,
@@ -69,13 +67,13 @@ class Time {
     }
 
     get seconds() {
-        return convertSecondsToSecondsUnit(this.#seconds);
+        return convertSecondsToSecondsUnit(this.tSeconds);
     }
 
     set seconds(seconds) {
         validateNumber(seconds);
 
-        this.#seconds = timeUnitsToTotalSeconds({
+        this.tSeconds = timeUnitsToTotalSeconds({
             hours: this.hours,
             minutes: this.minutes,
             seconds: seconds,
@@ -85,42 +83,42 @@ class Time {
     }
 
     get totalSeconds() {
-        return this.#seconds;
+        return this.tSeconds;
     }
 
     addHours(hours) {
         validateNumber(hours);
-        this.#seconds += hoursToTotalSeconds(hours);
+        this.tSeconds += hoursToTotalSeconds(hours);
         this.validateLimiter();
     }
 
     addMinutes(minutes) {
         validateNumber(minutes);
-        this.#seconds += minutesToTotalSeconds(minutes);
+        this.tSeconds += minutesToTotalSeconds(minutes);
         this.validateLimiter();
     }
 
     addSeconds(seconds) {
         validateNumber(seconds);
-        this.#seconds += seconds;
+        this.tSeconds += seconds;
         this.validateLimiter();
     }
 
     subHours(hours) {
         validateNumber(hours);
-        this.#seconds -= hoursToTotalSeconds(hours);
+        this.tSeconds -= hoursToTotalSeconds(hours);
         this.validateLimiter();
     }
 
     subMinutes(minutes) {
         validateNumber(minutes);
-        this.#seconds -= minutesToTotalSeconds(minutes);
+        this.tSeconds -= minutesToTotalSeconds(minutes);
         this.validateLimiter();
     }
 
     subSeconds(seconds) {
         validateNumber(seconds);
-        this.#seconds -= seconds;
+        this.tSeconds -= seconds;
         this.validateLimiter();
     }
 
@@ -137,7 +135,7 @@ class Time {
     }
 
     reset() {
-        this.#seconds = 0;
+        this.tSeconds = 0;
     }
 
     addTime(time2) {
@@ -145,7 +143,7 @@ class Time {
             throw Error('Invalid time input');
         }
 
-        this.#seconds += time2.totalSeconds;
+        this.tSeconds += time2.totalSeconds;
         this.validateLimiter();
     }
 
@@ -154,7 +152,7 @@ class Time {
             throw Error('Invalid time input');
         }
 
-        this.#seconds -= time2.totalSeconds;
+        this.tSeconds -= time2.totalSeconds;
         this.validateLimiter();
     }
 
@@ -164,7 +162,7 @@ class Time {
                 'Format options must contain one of the following: HH/MM/SS'
             );
         }
-        const sign = this.#seconds >= 0;
+        const sign = this.tSeconds >= 0;
 
         return (
             (sign ? '' : '-') +
